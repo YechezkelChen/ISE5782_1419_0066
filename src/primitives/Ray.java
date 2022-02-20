@@ -19,6 +19,14 @@ public class Ray {
         this.dir  = new Vector(p0.xyz.d1, p0.xyz.d2, p0.xyz.d3).normalize();
     }
 
+    public Point getP0() {
+        return p0;
+    }
+
+    public Vector getDir() {
+        return dir;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

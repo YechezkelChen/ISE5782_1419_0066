@@ -2,7 +2,6 @@ package primitives;
 
 /**
  * This class will serve all primitive classes based on points
- *
  */
 public class Point {
     final protected Double3 xyz;
@@ -37,8 +36,8 @@ public class Point {
      * @param vector Vector for add
      * @return a new point
      */
-    public Point add(Vector vector){
-        return null;
+    public Point add(Vector vector) {
+        return new Point(this.xyz.d1 + vector.xyz.d1, this.xyz.d2 + vector.xyz.d2, this.xyz.d3 + vector.xyz.d3);
     }
 
     /**
@@ -47,9 +46,8 @@ public class Point {
      * @param point - second point
      * @return a vector from the second point to the point on which the operation is performed
      */
-    public Vector subtract(Point point){
-        // return new Vector(point.xyz.d1 - this.xyz.d1, point.xyz.d2 - this.xyz.d2, point.xyz.d3 - this.xyz.d3);
-        return null;
+    public Vector subtract(Point point) {
+        return new Vector(point.xyz.d1 - this.xyz.d1, point.xyz.d2 - this.xyz.d2, point.xyz.d3 - this.xyz.d3);
     }
 
     /**
@@ -58,8 +56,12 @@ public class Point {
      * @param point the second point
      * @return distance between the two points squared
      */
-    public double distanceSquared(Point point){
-        return 0;
+    public double distanceSquared(Point point) {
+        double x = this.xyz.d1 + point.xyz.d1;
+        double y = this.xyz.d2 + point.xyz.d2;
+        double z = this.xyz.d3 + point.xyz.d3;
+
+        return x * x + y * y + z * z;
     }
 
     /**
@@ -68,7 +70,7 @@ public class Point {
      * @param point the second point
      * @return distance between the two points
      */
-    public double distance(Point point){
+    public double distance(Point point) {
         return Math.sqrt(distanceSquared(point));
     }
 }

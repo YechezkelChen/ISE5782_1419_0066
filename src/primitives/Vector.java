@@ -2,7 +2,6 @@ package primitives;
 
 /**
  * This class will serve all primitive classes based on vectors
- *
  */
 public class Vector extends Point {
 
@@ -26,7 +25,7 @@ public class Vector extends Point {
 
     @Override
     public String toString() {
-        return "Vector{} " + super.toString();
+        return "Vector: " + super.toString();
     }
 
     /**
@@ -36,7 +35,7 @@ public class Vector extends Point {
      * @return a new vector after the adding
      */
     public Vector add(Vector vector) {
-        return null;
+        return new Vector(this.xyz.d1 + vector.xyz.d1, this.xyz.d2 + vector.xyz.d2, this.xyz.d3 + vector.xyz.d3);
     }
 
     /**
@@ -46,17 +45,17 @@ public class Vector extends Point {
      * @return a new vector after the subtraction
      */
     public Vector subtract(Vector vector) {
-        return null;
+        return new Vector(this.xyz.d1 - vector.xyz.d1, this.xyz.d2 - vector.xyz.d2, this.xyz.d3 - vector.xyz.d3);
     }
 
     /**
      * Multiply Vector by Number - Scalar
      *
-     * @param Scalar the number for the multiply
+     * @param scalar the number for the multiply
      * @return a new vector after the multiply
      */
-    public Vector scale(double Scalar){
-        return null;
+    public Vector scale(double scalar) {
+        return new Vector(this.xyz.d1 * scalar, this.xyz.d2 * scalar, this.xyz.d3 * scalar);
     }
 
     /**
@@ -66,7 +65,11 @@ public class Vector extends Point {
      * @return a new vector that is perpendicular to the two existing vectors
      */
     public Vector crossProduct(Vector vector) {
-        return null;
+        return new Vector(
+                this.xyz.d2 * vector.xyz.d3 - this.xyz.d3 * vector.xyz.d2,
+                this.xyz.d3 * vector.xyz.d1 - this.xyz.d1 * vector.xyz.d3,
+                this.xyz.d1 * vector.xyz.d2 - this.xyz.d2 * vector.xyz.d1
+        );
     }
 
     /**
@@ -76,7 +79,7 @@ public class Vector extends Point {
      * @return Scalar after the multiply
      */
     public double dotProduct(Vector vector) {
-        return 0;
+        return this.xyz.d1 * vector.xyz.d1 + this.xyz.d2 * vector.xyz.d2 + this.xyz.d3 * vector.xyz.d3;
     }
 
     /**
@@ -85,7 +88,10 @@ public class Vector extends Point {
      * @return the length of the vector squared
      */
     public double lengthSquared() {
-        return 0;
+        return
+                this.xyz.d1 * this.xyz.d1
+                        + this.xyz.d2 * this.xyz.d2
+                        + this.xyz.d3 * this.xyz.d3;
     }
 
     /**
@@ -100,9 +106,9 @@ public class Vector extends Point {
     /**
      * A normalization operation on vector
      *
-     * @return  a new vector normalized in the same direction as the original vector
+     * @return a new vector normalized in the same direction as the original vector
      */
     public Vector normalize() {
-        return null;
+        return this.scale(1 / this.length());
     }
 }

@@ -2,6 +2,10 @@ package geometries;
 
 import primitives.*;
 
+/**
+ * Geometry interface represents all the shapes we work with
+ *
+ */
 public interface Geometry {
 
     /**

@@ -3,7 +3,8 @@ package geometries;
 import primitives.*;
 
 /**
- * Cylinder class represents .............................?????
+ * Cylinder class represents geometric place of all the points in space,
+ * which are at a fixed distance, the radius of the cylinder, some plane, the axis of the cylinder
  *
  */
 public class Cylinder extends Tube{
@@ -20,6 +21,17 @@ public class Cylinder extends Tube{
     public Cylinder(Ray axisRay, double radius, double height) {
         super(axisRay, radius);
         this.height = height;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    @Override
+    public String toString() {
+        return "Cylinder{" +
+                "height=" + height +
+                "} " + super.toString();
     }
 
     /**

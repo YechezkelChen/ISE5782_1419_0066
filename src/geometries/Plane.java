@@ -22,7 +22,7 @@ public class Plane implements Geometry{
      */
     public Plane(Point vertex1, Point vertex2, Point vertex3) {
         this.q0 = vertex1;
-        this.normal = getNormal(q0); // ??????
+        this.normal = getNormal(q0);
     }
 
     /**
@@ -34,6 +34,22 @@ public class Plane implements Geometry{
     public Plane(Point q0, Vector normal) {
         this.q0 = q0;
         this.normal = normal;
+    }
+
+    public Point getQ0() {
+        return q0;
+    }
+
+    public Vector getNormal() {
+        return normal;
+    }
+
+    @Override
+    public String toString() {
+        return "Plane{" +
+                "q0=" + q0 +
+                ", normal=" + normal +
+                '}';
     }
 
     /**

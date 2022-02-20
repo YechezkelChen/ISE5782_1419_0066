@@ -3,7 +3,7 @@ package geometries;
 import primitives.*;
 
 /**
- * Tube class represents .............................?????
+ * Tube class represents infinite cylinder with ray and radius
  *
  */
 public class Tube implements Geometry {
@@ -20,6 +20,22 @@ public class Tube implements Geometry {
     public Tube(Ray axisRay, double radius) {
         this.axisRay = axisRay;
         this.radius = radius;
+    }
+
+    public Ray getAxisRay() {
+        return axisRay;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    @Override
+    public String toString() {
+        return "Tube{" +
+                "axisRay=" + axisRay +
+                ", radius=" + radius +
+                '}';
     }
 
     /**

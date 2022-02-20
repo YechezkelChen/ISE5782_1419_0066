@@ -3,7 +3,9 @@ package geometries;
 import primitives.*;
 
 /**
- * Sphere class represents .............................?????
+ * Sphere class represents geometric body composed of
+ * points in space whose distance from a fixed point is
+ * at most a certain fixed number, called a radius.
  *
  */
 public class Sphere implements Geometry{
@@ -20,6 +22,22 @@ public class Sphere implements Geometry{
     public Sphere(Point center, double radius) {
         this.center = center;
         this.radius = radius;
+    }
+
+    public Point getCenter() {
+        return center;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    @Override
+    public String toString() {
+        return "Sphere{" +
+                "center=" + center +
+                ", radius=" + radius +
+                '}';
     }
 
     /**
