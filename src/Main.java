@@ -1,3 +1,7 @@
+/**
+ * First Partner: Name: Yechezkel Chen ID: 325191419
+ * Second Partner: Name: David Ankory ID: 206780066
+ */
 import primitives.*;
 import static java.lang.System.out;
 import static primitives.Util.*;

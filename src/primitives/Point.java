@@ -22,7 +22,7 @@ public class Point {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
-        return super.equals(point.xyz);
+        return this.xyz.equals(point.xyz);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Point {
      * @return a vector from the second point to the point on which the operation is performed
      */
     public Vector subtract(Point point) {
-        return new Vector(point.xyz.d1 - this.xyz.d1, point.xyz.d2 - this.xyz.d2, point.xyz.d3 - this.xyz.d3);
+        return new Vector(this.xyz.d1 - point.xyz.d1, this.xyz.d2 - point.xyz.d2, this.xyz.d3 - point.xyz.d3);
     }
 
     /**

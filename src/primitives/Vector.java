@@ -20,7 +20,7 @@ public class Vector extends Point {
 
     @Override
     public boolean equals(Object o) {
-        return super.equals((Point) o);
+        return super.equals(o);
     }
 
     @Override
