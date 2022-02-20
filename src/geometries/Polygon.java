@@ -6,10 +6,8 @@ import primitives.*;
 import static primitives.Util.*;
 
 /**
- * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
- * system
- * 
- * @author Dan
+ * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate system
+ *
  */
 public class Polygon implements Geometry {
 	/**
@@ -84,6 +82,12 @@ public class Polygon implements Geometry {
 		size = vertices.length;
 	}
 
+	/**
+	 * returns the normal vector (vertical) to the body at the point.
+	 *
+	 * @param point one point-type parameter [across the geometric body]
+	 * @return the normal vector (vertical) to the body at this point.
+	 */
 	@Override
 	public Vector getNormal(Point point) {
 		return plane.getNormal();

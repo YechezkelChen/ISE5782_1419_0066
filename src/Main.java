@@ -5,7 +5,6 @@ import static primitives.Util.*;
 /**
  * Test program for the 1st stage
  *
- * @author Dan Zilberstein
  */
 public final class Main {
 
@@ -17,19 +16,19 @@ public final class Main {
 	public static void main(String[] args) {
 
 		try { // test zero vector
-			new Vector(0, 0, 0);
+			new Vector(0.0, 0.0, 0.0);
 			out.println("ERROR: zero vector does not throw an exception");
 		} catch (Exception e) {
 		}
 
-		Vector v1 = new Vector(1, 2, 3);
-		Vector v2 = new Vector(-2, -4, -6);
-		Vector v3 = new Vector(0, 3, -2);
+		Vector v1 = new Vector(1.0, 2.0, 3.0);
+		Vector v2 = new Vector(-2.0, -4.0, -6.0);
+		Vector v3 = new Vector(0.0, 3.0, -2.0);
 
 		// test length..
 		if (!isZero(v1.lengthSquared() - 14))
 			out.println("ERROR: lengthSquared() wrong value");
-		if (!isZero(new Vector(0, 3, 4).length() - 5))
+		if (!isZero(new Vector(0.0, 3.0, 4.0).length() - 5))
 			out.println("ERROR: length() wrong value");
 
 		// test Dot-Product
@@ -51,7 +50,7 @@ public final class Main {
 			out.println("ERROR: crossProduct() result is not orthogonal to its operands");
 
 		// test vector normalization vs vector length and cross-product
-		Vector v = new Vector(1, 2, 3);
+		Vector v = new Vector(1.0, 2.0, 3.0);
 		Vector u = v.normalize();
 		if (!isZero(u.length() - 1))
 			out.println("ERROR: the normalized vector is not a unit vector");
@@ -64,10 +63,10 @@ public final class Main {
 			out.println("ERROR: the normalized vector is opposite to the original one");
 
 		// Test operations with points and vectors
-		Point p1 = new Point(1, 2, 3);
-		if (!(p1.add(new Vector(-1, -2, -3)).equals(new Point(0, 0, 0))))
+		Point p1 = new Point(1.0, 2.0, 3.0);
+		if (!(p1.add(new Vector(-1.0, -2.0, -3.0)).equals(new Point(0.0, 0.0, 0.0))))
 			out.println("ERROR: Point + Vector does not work correctly");
-		if (!new Vector(1, 1, 1).equals(new Point(2, 3, 4).subtract(p1)))
+		if (!new Vector(1.0, 1.0, 1.0).equals(new Point(2.0, 3.0, 4.0).subtract(p1)))
 			out.println("ERROR: Point - Point does not work correctly");
 
 		out.println("If there were no any other outputs - all tests succeeded!");
