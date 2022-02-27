@@ -4,7 +4,7 @@ package primitives;
  * This class will serve all primitive classes based on points
  */
 public class Point {
-    final protected Double3 xyz;
+    Double3 xyz;
 
     /**
      * Constructor to initialize Point based object with its three number values
@@ -15,6 +15,15 @@ public class Point {
      */
     public Point(Double x, Double y, Double z) {
         this.xyz = new Double3(x, y, z);
+    }
+
+    /**
+     * Constructor to initialize Point based object of Double3
+     *
+     * @param xyz object of Double3
+     */
+    public Point(Double3 xyz) {
+        this.xyz = new Double3(xyz.d1, xyz.d2, xyz.d3);
     }
 
     @Override
@@ -37,7 +46,7 @@ public class Point {
      * @return a new point
      */
     public Point add(Vector vector) {
-        return new Point(this.xyz.d1 + vector.xyz.d1, this.xyz.d2 + vector.xyz.d2, this.xyz.d3 + vector.xyz.d3);
+        return new Point(this.xyz.add(vector.xyz));
     }
 
     /**
@@ -47,7 +56,7 @@ public class Point {
      * @return a vector from the second point to the point on which the operation is performed
      */
     public Vector subtract(Point point) {
-        return new Vector(this.xyz.d1 - point.xyz.d1, this.xyz.d2 - point.xyz.d2, this.xyz.d3 - point.xyz.d3);
+        return new Vector(this.xyz.subtract(point.xyz));
     }
 
     /**
