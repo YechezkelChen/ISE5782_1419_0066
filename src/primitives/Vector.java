@@ -48,11 +48,12 @@ public class Vector extends Point {
         return new Vector(vector.xyz.d1 - this.xyz.d1 , vector.xyz.d2 - this.xyz.d2 , vector.xyz.d3 - this.xyz.d3 );
     }
 
+
     /**
-     * Multiply Vector by Number - Scalar
+     * Given a vector and a scalar, return a new vector that is the original vector scaled by the scalar
      *
-     * @param scalar the number for the multiply
-     * @return a new vector after the multiply
+     * @param scalar the number to multiply the vector by
+     * @return A new Vector object.
      */
     public Vector scale(double scalar) {
         return new Vector(this.xyz.d1 * scalar, this.xyz.d2 * scalar, this.xyz.d3 * scalar);
