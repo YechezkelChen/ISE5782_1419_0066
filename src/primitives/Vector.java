@@ -51,11 +51,12 @@ public class Vector extends Point {
         return new Vector(this.xyz.add(vector.xyz));
     }
 
+
     /**
-     * Multiply Vector by Number - Scalar
+     * Given a vector and a scalar, return a new vector that is the original vector scaled by the scalar
      *
-     * @param scalar the number for the multiply
-     * @return a new vector after the multiply
+     * @param scalar the number to multiply the vector by
+     * @return A new Vector object.
      */
     public Vector scale(double scalar) {
         return new Vector(this.xyz.scale(scalar));
