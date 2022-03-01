@@ -2,7 +2,9 @@ package primitives;
 
 import org.junit.jupiter.api.Test;
 
+import static java.lang.System.out;
 import static org.junit.jupiter.api.Assertions.*;
+import static primitives.Util.*;
 
 /**
  * Unit tests for Vector class
@@ -37,17 +39,16 @@ class VectorTest {
 
         // TC01: Test that length of cross-product is proper (orthogonal vectors taken
         // for simplicity)
-        assertEquals("crossProduct() wrong result length", v1.length() * v2.length(), vr.length(), 0.00001);
+        assertEquals(v1.length() * v2.length(), vr.length(), 0.00001, "crossProduct() wrong result length");
 
         // TC02: Test cross-product result orthogonality to its operands
-        assertTrue("crossProduct() result is not orthogonal to 1st operand", isZero(vr.dotProduct(v1)));
-        assertTrue("crossProduct() result is not orthogonal to 2nd operand", isZero(vr.dotProduct(v2)));
+        assertTrue(isZero(vr.dotProduct(v1)), "crossProduct() result is not orthogonal to 1st operand");
+        assertTrue(isZero(vr.dotProduct(v2)), "crossProduct() result is not orthogonal to 2nd operand");
 
         // =============== Boundary Values Tests ==================
         // TC11: test zero vector from cross-productof co-lined vectors
         Vector v3 = new Vector(-2.0, -4.0, -6.0);
-        assertThrows("crossProduct() for parallel vectors does not throw an exception",
-                IllegalArgumentException.class, () -> v1.crossProduct(v3));
+        assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v3), "crossProduct() for parallel vectors does not throw an exception");
 
     }
 
@@ -77,5 +78,13 @@ class VectorTest {
      */
     @Test
     void testNormalize() {
+        Vector v = new Vector(0.0, 3.0, 4.0);
+        Vector n = v.normalize();
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Simple test
+        assertEquals(1d, n.lengthSquared(), 0.00001, "wrong normalized vector length");
+        assertThrows(IllegalArgumentException.class, () -> v.crossProduct(n), //
+                "normalized vector is not in the same direction");
+        assertEquals(new Vector(0.0, 0.6, 0.8), n, "wrong normalized vector");
     }
 }

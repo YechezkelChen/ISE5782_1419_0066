@@ -3,7 +3,6 @@ package primitives;
 /**
  * This class will serve all primitive classes based on vectors
  * A vector is a point with three number values
- *
  */
 public class Vector extends Point {
 
@@ -69,6 +68,11 @@ public class Vector extends Point {
      * @return a new vector that is perpendicular to the two existing vectors
      */
     public Vector crossProduct(Vector vector) {
+        // We test whether two vectors are parallel, if so then it is impossible to make a vector product between them
+        //Check this by the formula: a || b <==> a * b = +-|a||b|
+        double dotProduct = this.dotProduct(vector);
+        if (dotProduct == this.length() * vector.length() || dotProduct == -this.length() * vector.length())
+            throw new IllegalArgumentException("ERROR: It is not possible to calculate a vector product of two parallel vectors");
         return new Vector(
                 this.xyz.d2 * vector.xyz.d3 - this.xyz.d3 * vector.xyz.d2,
                 this.xyz.d3 * vector.xyz.d1 - this.xyz.d1 * vector.xyz.d3,
