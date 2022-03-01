@@ -4,12 +4,13 @@ import primitives.*;
 
 /**
  * Cylinder class represents geometric place of all the points in space,
- * which are at a fixed distance, the radius of the cylinder, some plane, the axis of the cylinder
+ * which are at a fixed distance, the radius of the cylinder, some plane, the axis of the cylinder,
+ * and it has a height
  *
  */
 public class Cylinder extends Tube{
 
-    private double height;
+    private final double height;
 
     /**
      * Constructor to initialize Cylinder based object on Tube and height

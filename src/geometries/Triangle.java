@@ -3,7 +3,7 @@ package geometries;
 import primitives.*;
 
 /**
- * Triangle class represents two-dimensional shape contained in a plane, i.e. a polygon with 3 sides
+ * Triangle class represents a polygon with three points
  *
  */
 public class Triangle extends Polygon{

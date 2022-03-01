@@ -2,11 +2,12 @@ package primitives;
 
 /**
  * This class will serve all primitive classes based on rays
+ * A ray is defined by a point and a vector
  *
  */
 public class Ray {
-    private Point p0;
-    private Vector dir;
+    private final Point p0;
+    private final Vector dir;
 
     /**
      * Constructor to initialize Ray based point and vector
