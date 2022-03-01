@@ -11,21 +11,30 @@ import static org.junit.jupiter.api.Assertions.*;
 class PointTest {
 
     /**
-     * Test method for {@link primitives.Point add(primitives.Point)}.
+     * Test method for {@link Point add(Vector)}.
      */
     @Test
     void testAdd() {
     }
 
+    /**
+     * Test method for {@link Vector subtract(Point)}.
+     */
     @Test
-    void subtract() {
+    void testSubtract() {
     }
 
+    /**
+     * Test method for {@link double distanceSquared(Point)}.
+     */
     @Test
-    void distanceSquared() {
+    void testDistanceSquared() {
     }
 
+    /**
+     * Test method for {@link double distance(Point)}.
+     */
     @Test
-    void distance() {
+    void testDistance() {
     }
 }
