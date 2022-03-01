@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for primitives.Point class
+ * Unit tests for Point class
  *
  */
 class PointTest {
