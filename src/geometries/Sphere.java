@@ -10,8 +10,8 @@ import primitives.*;
  */
 public class Sphere implements Geometry{
 
-    private Point center;
-    private double radius;
+    private final Point center;
+    private final double radius;
 
     /**
      * Constructor to initialize Sphere based object with point and radius

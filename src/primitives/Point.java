@@ -2,9 +2,11 @@ package primitives;
 
 /**
  * This class will serve all primitive classes based on points
+ * Point is a class that represents a point in 3D space
+ *
  */
 public class Point {
-    Double3 xyz;
+    final Double3 xyz;
 
     /**
      * Constructor to initialize Point based object with its three number values

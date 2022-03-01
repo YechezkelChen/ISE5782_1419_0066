@@ -5,12 +5,13 @@ import primitives.*;
 /**
  * Plane class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
+ * A plane is defined by a point and a normal vector
  *
  */
 public class Plane implements Geometry{
 
-    private Point q0;
-    private Vector normal;
+    private final Point q0;
+    private final Vector normal;
 
     /**
      * Calculates the normal and inserts the normal vector,

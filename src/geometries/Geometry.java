@@ -14,5 +14,5 @@ public interface Geometry {
      * @param point one point-type parameter [across the geometric body]
      * @return the normal vector (vertical) to the body at this point.
      */
-    public Vector getNormal(Point point);
+    Vector getNormal(Point point);
 }

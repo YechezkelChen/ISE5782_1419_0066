@@ -2,6 +2,8 @@ package primitives;
 
 /**
  * This class will serve all primitive classes based on vectors
+ * A vector is a point with three number values
+ *
  */
 public class Vector extends Point {
 
