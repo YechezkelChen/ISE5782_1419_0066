@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit tests for Cylinder class
  *
  */
-class CylinderTest {
+public class CylinderTest {
 
     /**
      * Test method for {@link Vector getNormal(Point)}.

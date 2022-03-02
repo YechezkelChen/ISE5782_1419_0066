@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit tests for Plane class
  *
  */
-class PlaneTest {
+public class PlaneTest {
 
     /**
      * Test method for {@link Vector getNormal(Point)}.

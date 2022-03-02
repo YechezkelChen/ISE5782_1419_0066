@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit tests for Sphere class
  *
  */
-class SphereTest {
+public class SphereTest {
 
     /**
      * Test method for {@link Vector getNormal(Point)}.
