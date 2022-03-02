@@ -68,11 +68,11 @@ public class Vector extends Point {
      * @return a new vector that is perpendicular to the two existing vectors
      */
     public Vector crossProduct(Vector vector) {
-        // We test whether two vectors are parallel, if so then it is impossible to make a vector product between them
+        // We test whether two vectors are parallel, If two vectors are parallel return the zero vector
         //Check this by the formula: a || b <==> a * b = +-|a||b|
         double dotProduct = this.dotProduct(vector);
         if (dotProduct == this.length() * vector.length() || dotProduct == -this.length() * vector.length())
-            throw new IllegalArgumentException("ERROR: It is not possible to calculate a vector product of two parallel vectors");
+            throw new IllegalArgumentException("ERROR: If two vectors are parallel return the zero vector");
         return new Vector(
                 this.xyz.d2 * vector.xyz.d3 - this.xyz.d3 * vector.xyz.d2,
                 this.xyz.d3 * vector.xyz.d1 - this.xyz.d1 * vector.xyz.d3,
@@ -87,7 +87,11 @@ public class Vector extends Point {
      * @return Scalar after the multiply
      */
     public double dotProduct(Vector vector) {
+        // We test whether two vectors are orthogonal, If two vectors are orthogonal we throw exception
+        // if the result of the cross-product is zero the vectors are orthogonal
         Double3 xyz = this.xyz.product(vector.xyz);
+        if (xyz.equals(xyz.ZERO))
+            throw new IllegalArgumentException("ERROR: two vectors are orthogonal ");
         return xyz.d1 + xyz.d2 + xyz.d3;
     }
 
@@ -115,6 +119,10 @@ public class Vector extends Point {
      * @return a new vector normalized in the same direction as the original vector
      */
     public Vector normalize() {
-        return this.scale(1 / this.length());
+        double length = this.length();
+        if(length == 0)
+            throw new IllegalArgumentException ("ERROR: can not divided by zero");
+
+        return this.scale(1 / length);
     }
 }

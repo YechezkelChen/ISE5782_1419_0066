@@ -8,15 +8,22 @@ import static primitives.Util.*;
 
 /**
  * Unit tests for Vector class
- *
  */
-class VectorTest {
+public class VectorTest {
 
     /**
      * Test method for {@link Vector add(Vector)}.
      */
     @Test
     void testAdd() {
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Test the add operation with vectors
+        Vector v1 = new Vector(1.0, 2.0, 3.0);
+        assertEquals(v1.add(new Vector(-1.0, -2.0, -3.0)), new Vector(0.0, 0.0, 0.0), "Vector + Vector does not work correctly");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: Test the add operation with 0 on vector
+        assertEquals(v1.add(new Vector(0.0, 0.0, 0.0)), v1, "Vector + zero vector does not work correctly");
     }
 
     /**
@@ -24,6 +31,17 @@ class VectorTest {
      */
     @Test
     void testScale() {
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Test the scale operation with vector
+        Vector v1 = new Vector(1.0, 2.0, 3.0);
+        assertEquals(v1.scale(5), new Vector(5.0, 10.0, 15.0), "scale * Vector does not work correctly");
+
+        // TC02: Test the scale operation with negative scale on vector
+        assertEquals(v1.scale(-5), new Vector(-5.0, -10.0, -15.0), "scale * Vector does not work correctly");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: Test the scale operation with 0 on vector
+        assertEquals(v1.scale(0), new Vector(0.0, 0.0, 0.0), "0 * Vector does not work correctly");
     }
 
     /**
@@ -46,7 +64,7 @@ class VectorTest {
         assertTrue(isZero(vr.dotProduct(v2)), "crossProduct() result is not orthogonal to 2nd operand");
 
         // =============== Boundary Values Tests ==================
-        // TC11: test zero vector from cross-productof co-lined vectors
+        // TC11: test zero vector from cross-product of co-lined vectors
         Vector v3 = new Vector(-2.0, -4.0, -6.0);
         assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v3), "crossProduct() for parallel vectors does not throw an exception");
 
@@ -60,10 +78,18 @@ class VectorTest {
         Vector v1 = new Vector(1.0, 2.0, 3.0);
         Vector v2 = new Vector(-2.0, -4.0, -6.0);
         Vector v3 = new Vector(0.0, 3.0, -2.0);
-        if (!isZero(v1.dotProduct(v3)))
-            out.println("ERROR: dotProduct() for orthogonal vectors is not zero");
-        if (!isZero(v1.dotProduct(v2) + 28))
-            out.println("ERROR: dotProduct() wrong value");
+
+        // ============ Equivalence Partitions Tests ==============
+
+        // TC01: Test that dotProduct for orthogonal vectors is zero
+        assertTrue(isZero(v1.dotProduct(v3)), "dotProduct() for orthogonal vectors is not zero");
+
+        // TC02: Test that dotProduct result is not the correct value
+        assertTrue(isZero(v1.dotProduct(v2) + 28), "dotProduct() wrong value");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: test zero vector from dot-product of orthogonal vectors
+        assertThrows(IllegalArgumentException.class, () -> v1.dotProduct(v3), "dotProduct() for orthogonal vectors does not throw an exception");
     }
 
     /**
@@ -72,8 +98,15 @@ class VectorTest {
     @Test
     void testLengthSquared() {
         Vector v1 = new Vector(1.0, 2.0, 3.0);
-        if (!isZero(v1.lengthSquared() - 14))
-            out.println("ERROR: lengthSquared() wrong value");
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Test if the length result is correct
+        assertTrue(isZero(v1.lengthSquared() - 14), "lengthSquared() wrong value");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: test zero vector return 0 lenght
+        Vector v2 = new Vector(0.0, 0.0, 0.0);
+        assertTrue(isZero(v2.lengthSquared()), "lengthSquared() wrong value");
     }
 
     /**
@@ -82,8 +115,14 @@ class VectorTest {
     @Test
     void testLength() {
         Vector v1 = new Vector(0.0, 3.0, 4.0);
-        if (!isZero(v1.length() - 5))
-            out.println("ERROR: length() wrong value");
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Test if the length result is correct
+        assertTrue(isZero(v1.lengthSquared() - 5), "length() wrong value");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: test zero vector return 0 lenght
+        Vector v2 = new Vector(0.0, 0.0, 0.0);
+        assertTrue(isZero(v2.lengthSquared()), "length() wrong value");
     }
 
     /**
@@ -99,5 +138,10 @@ class VectorTest {
         assertThrows(IllegalArgumentException.class, () -> v.crossProduct(n), //
                 "normalized vector is not in the same direction");
         assertEquals(new Vector(0.0, 0.6, 0.8), n, "wrong normalized vector");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: test zero vector from cross-product of co-lined vectors
+        assertThrows(IllegalArgumentException.class, () -> new Vector(0.0, 0.0, 0.0).normalize(), //
+                "normalized of vector zero is not correct");
     }
 }
