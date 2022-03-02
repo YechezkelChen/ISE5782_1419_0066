@@ -10,7 +10,7 @@ import static primitives.Util.*;
  * Unit tests for Vector class
  *
  */
-class VectorTest {
+public class VectorTest {
 
     /**
      * Test method for {@link Vector add(Vector)}.

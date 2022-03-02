@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit tests for Tube class
  *
  */
-class TubeTest {
+public class TubeTest {
 
     /**
      * Test method for {@link Vector getNormal(Point)}.
