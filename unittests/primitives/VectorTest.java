@@ -64,6 +64,9 @@ class VectorTest {
      */
     @Test
     void testLengthSquared() {
+        Vector v1 = new Vector(1.0, 2.0, 3.0);
+        if (!isZero(v1.lengthSquared() - 14))
+            out.println("ERROR: lengthSquared() wrong value");
     }
 
     /**
@@ -71,6 +74,9 @@ class VectorTest {
      */
     @Test
     void testLength() {
+        Vector v1 = new Vector(0.0, 3.0, 4.0);
+        if (!isZero(v1.length() - 5))
+            out.println("ERROR: length() wrong value");
     }
 
     /**

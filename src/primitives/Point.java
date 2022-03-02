@@ -68,9 +68,10 @@ public class Point {
      * @return distance between the two points squared
      */
     public double distanceSquared(Point point) {
-        double x = this.xyz.d1 + point.xyz.d1;
-        double y = this.xyz.d2 + point.xyz.d2;
-        double z = this.xyz.d3 + point.xyz.d3;
+        Point newPoint = this.subtract(point);
+        double x = newPoint.xyz.d1;
+        double y = newPoint.xyz.d2;
+        double z = newPoint.xyz.d3;
 
         return x * x + y * y + z * z;
     }
