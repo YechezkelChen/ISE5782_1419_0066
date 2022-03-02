@@ -22,8 +22,8 @@ public class VectorTest {
         assertEquals(v1.add(new Vector(-1.0, -2.0, -3.0)), new Vector(0.0, 0.0, 0.0), "Vector + Vector does not work correctly");
 
         // =============== Boundary Values Tests ==================
-        // TC11: Test the add operation with 0 on vector
-        assertEquals(v1.add(new Vector(0.0, 0.0, 0.0)), v1, "Vector + zero vector does not work correctly");
+        // TC11: Test the add operation with vector and vector 0
+        assertEquals(v1.add(new Vector(0.0, 0.0, 0.0)), v1, "Vector + Vector 0 does not work correctly");
     }
 
     /**
