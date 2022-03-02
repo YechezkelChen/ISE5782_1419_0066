@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit tests for Point class
  *
  */
-class PointTest {
+public class PointTest {
 
     /**
      * Test method for {@link Point add(Vector)}.
