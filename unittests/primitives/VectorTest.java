@@ -57,6 +57,13 @@ class VectorTest {
      */
     @Test
     void testDotProduct() {
+        Vector v1 = new Vector(1.0, 2.0, 3.0);
+        Vector v2 = new Vector(-2.0, -4.0, -6.0);
+        Vector v3 = new Vector(0.0, 3.0, -2.0);
+        if (!isZero(v1.dotProduct(v3)))
+            out.println("ERROR: dotProduct() for orthogonal vectors is not zero");
+        if (!isZero(v1.dotProduct(v2) + 28))
+            out.println("ERROR: dotProduct() wrong value");
     }
 
     /**
