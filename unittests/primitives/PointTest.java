@@ -23,6 +23,8 @@ public class PointTest {
 
         // =============== Boundary Values Tests ==================
         // TC11: Test the add operation with Point and vector 0
+        assertThrows(IllegalArgumentException.class, () ->p1.add(new Vector(-1.0, -2.0, -3.0)), "point + (-)Vector give vector Zero" +
+                " and not throw  exception");
         assertEquals(p1.add(new Vector(0.0, 0.0, 0.0)), p1, "Point + Vector 0 does not work correctly");
     }
 
@@ -39,6 +41,8 @@ public class PointTest {
 
         // =============== Boundary Values Tests ==================
         // TC11: Test the subtract operation with Point and point 0
+        assertThrows(IllegalArgumentException.class, () ->p1.subtract(new Vector(1.0, 2.0, 3.0)), "Vector + (-)Vector give vector Zero" +
+                " and not throw  exception");
         assertEquals(p1.subtract(new Point(0.0, 0.0, 0.0)), new Vector(1.0, 2.0, 3.0),
                 "Point - Point 0, does not work correctly");
     }

@@ -23,6 +23,8 @@ public class VectorTest {
 
         // =============== Boundary Values Tests ==================
         // TC11: Test the add operation with vector and vector 0
+        assertThrows(IllegalArgumentException.class, () ->v1.add(new Vector(-1.0, -2.0, -3.0)), "Vector + (-)Vector give vector Zero" +
+                " and not throw  exception");
         assertEquals(v1.add(new Vector(0.0, 0.0, 0.0)), v1, "Vector + Vector 0 does not work correctly");
     }
 
@@ -41,6 +43,8 @@ public class VectorTest {
 
         // =============== Boundary Values Tests ==================
         // TC11: Test the scale operation with 0 on vector
+        assertThrows(IllegalArgumentException.class, () ->v1.scale(0), "0 * Vector does not work correctly \"" +
+                " and not throw  exception");
         assertEquals(v1.scale(0), new Vector(0.0, 0.0, 0.0), "0 * Vector does not work correctly");
     }
 
@@ -105,6 +109,9 @@ public class VectorTest {
 
         // =============== Boundary Values Tests ==================
         // TC11: test zero vector return 0 lenght
+        //ניסתי ולא מצאתי דרך איך לעשות את זה לכן אני חושב שכאן לא צריך בדיקת גבול
+        assertThrows(IllegalArgumentException.class, () -> v1.lengthSquared(), "0 * Vector does not work correctly \"" +
+                " and not throw  exception");
         Vector v2 = new Vector(0.0, 0.0, 0.0);
         assertTrue(isZero(v2.lengthSquared()), "lengthSquared() wrong value");
     }
@@ -121,6 +128,7 @@ public class VectorTest {
 
         // =============== Boundary Values Tests ==================
         // TC11: test zero vector return 0 lenght
+        //כנל
         Vector v2 = new Vector(0.0, 0.0, 0.0);
         assertTrue(isZero(v2.lengthSquared()), "length() wrong value");
     }
@@ -141,6 +149,8 @@ public class VectorTest {
 
         // =============== Boundary Values Tests ==================
         // TC11: test zero vector from cross-product of co-lined vectors
+        //כנל
+
         assertThrows(IllegalArgumentException.class, () -> new Vector(0.0, 0.0, 0.0).normalize(), //
                 "normalized of vector zero is not correct");
     }
