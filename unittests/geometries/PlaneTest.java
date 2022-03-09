@@ -17,6 +17,7 @@ public class PlaneTest {
      */
     @Test
     void testGetNormal() {
-
+        PolygonTests p = new PolygonTests();
+        p.testGetNormal();
     }
 }

@@ -22,10 +22,9 @@ public class PointTest {
         assertEquals(p1.add(new Vector(-1.0, -2.0, -3.0)), new Point(0.0, 0.0, 0.0), "Point + Vector does not work correctly");
 
         // =============== Boundary Values Tests ==================
-        // TC11: Test the add operation with Point and vector 0
-        assertThrows(IllegalArgumentException.class, () ->p1.add(new Vector(-1.0, -2.0, -3.0)), "point + (-)Vector give vector Zero" +
-                " and not throw  exception");
-        assertEquals(p1.add(new Vector(0.0, 0.0, 0.0)), p1, "Point + Vector 0 does not work correctly");
+        // TC11: Test the add operation with Point and contrasting vector of the same coordinate
+        assertThrows(IllegalArgumentException.class, () ->p1.add(new Vector(-1.0, -2.0, -3.0)),
+                "point + (-)Vector give vector Zero and not throw  exception");
     }
 
     /**
@@ -40,11 +39,9 @@ public class PointTest {
                 "Point - Point does not work correctly");
 
         // =============== Boundary Values Tests ==================
-        // TC11: Test the subtract operation with Point and point 0
-        assertThrows(IllegalArgumentException.class, () ->p1.subtract(new Vector(1.0, 2.0, 3.0)), "Vector + (-)Vector give vector Zero" +
-                " and not throw  exception");
-        assertEquals(p1.subtract(new Point(0.0, 0.0, 0.0)), new Vector(1.0, 2.0, 3.0),
-                "Point - Point 0, does not work correctly");
+        // TC11: Test the subtract operation with Point and same vector of the same coordinate
+        assertThrows(IllegalArgumentException.class, () ->p1.subtract(new Vector(1.0, 2.0, 3.0)),
+                "Vector + (-)Vector give vector Zero and not throw  exception");
     }
 
     /**

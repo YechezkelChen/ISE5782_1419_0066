@@ -22,10 +22,9 @@ public class VectorTest {
         assertEquals(v1.add(new Vector(-1.0, -2.0, -3.0)), new Vector(0.0, 0.0, 0.0), "Vector + Vector does not work correctly");
 
         // =============== Boundary Values Tests ==================
-        // TC11: Test the add operation with vector and vector 0
-        assertThrows(IllegalArgumentException.class, () ->v1.add(new Vector(-1.0, -2.0, -3.0)), "Vector + (-)Vector give vector Zero" +
-                " and not throw  exception");
-        assertEquals(v1.add(new Vector(0.0, 0.0, 0.0)), v1, "Vector + Vector 0 does not work correctly");
+        // TC11: Test the add operation with vector and contrasting vector of the same coordinate
+        assertThrows(IllegalArgumentException.class, () ->v1.add(new Vector(-1.0, -2.0, -3.0)),
+                "Vector + (-)Vector give vector Zero and not throw  exception");
     }
 
     /**
@@ -43,9 +42,8 @@ public class VectorTest {
 
         // =============== Boundary Values Tests ==================
         // TC11: Test the scale operation with 0 on vector
-        assertThrows(IllegalArgumentException.class, () ->v1.scale(0), "0 * Vector does not work correctly \"" +
-                " and not throw  exception");
-        assertEquals(v1.scale(0), new Vector(0.0, 0.0, 0.0), "0 * Vector does not work correctly");
+        assertThrows(IllegalArgumentException.class, () ->v1.scale(0),
+                "0 * Vector does not work correctly and not throw  exception");
     }
 
     /**
@@ -70,7 +68,8 @@ public class VectorTest {
         // =============== Boundary Values Tests ==================
         // TC11: test zero vector from cross-product of co-lined vectors
         Vector v3 = new Vector(-2.0, -4.0, -6.0);
-        assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v3), "crossProduct() for parallel vectors does not throw an exception");
+        assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v3),
+                "crossProduct() for parallel vectors does not throw an exception");
 
     }
 
@@ -93,7 +92,8 @@ public class VectorTest {
 
         // =============== Boundary Values Tests ==================
         // TC11: test zero vector from dot-product of orthogonal vectors
-        assertThrows(IllegalArgumentException.class, () -> v1.dotProduct(v3), "dotProduct() for orthogonal vectors does not throw an exception");
+        assertThrows(IllegalArgumentException.class, () -> v1.dotProduct(v3),
+                "dotProduct() for orthogonal vectors does not throw an exception");
     }
 
     /**
@@ -106,14 +106,6 @@ public class VectorTest {
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test if the length result is correct
         assertTrue(isZero(v1.lengthSquared() - 14), "lengthSquared() wrong value");
-
-        // =============== Boundary Values Tests ==================
-        // TC11: test zero vector return 0 lenght
-        //ניסתי ולא מצאתי דרך איך לעשות את זה לכן אני חושב שכאן לא צריך בדיקת גבול
-        assertThrows(IllegalArgumentException.class, () -> v1.lengthSquared(), "0 * Vector does not work correctly \"" +
-                " and not throw  exception");
-        Vector v2 = new Vector(0.0, 0.0, 0.0);
-        assertTrue(isZero(v2.lengthSquared()), "lengthSquared() wrong value");
     }
 
     /**
@@ -125,12 +117,6 @@ public class VectorTest {
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test if the length result is correct
         assertTrue(isZero(v1.lengthSquared() - 5), "length() wrong value");
-
-        // =============== Boundary Values Tests ==================
-        // TC11: test zero vector return 0 lenght
-        //כנל
-        Vector v2 = new Vector(0.0, 0.0, 0.0);
-        assertTrue(isZero(v2.lengthSquared()), "length() wrong value");
     }
 
     /**
@@ -146,12 +132,5 @@ public class VectorTest {
         assertThrows(IllegalArgumentException.class, () -> v.crossProduct(n), //
                 "normalized vector is not in the same direction");
         assertEquals(new Vector(0.0, 0.6, 0.8), n, "wrong normalized vector");
-
-        // =============== Boundary Values Tests ==================
-        // TC11: test zero vector from cross-product of co-lined vectors
-        //כנל
-
-        assertThrows(IllegalArgumentException.class, () -> new Vector(0.0, 0.0, 0.0).normalize(), //
-                "normalized of vector zero is not correct");
     }
 }
