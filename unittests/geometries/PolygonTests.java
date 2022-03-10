@@ -1,10 +1,10 @@
 package geometries;
 
-        import static org.junit.jupiter.api.Assertions.*;
-        import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
-        import geometries.*;
-        import primitives.*;
+import geometries.*;
+import primitives.*;
 
 /**
  * Testing Polygons
@@ -70,6 +70,6 @@ public class PolygonTests {
         // TC01: There is a simple single test here
         Polygon pl = new Polygon(new Point(0.0, 0.0, 1.0), new Point(1.0, 0.0, 0.0), new Point(0.0, 1.0, 0.0), new Point(-1.0, 1.0, 1.0));
         double sqrt3 = Math.sqrt(1d / 3);
-        assertEquals(new Vector(sqrt3, sqrt3, sqrt3), pl.getNormal(new Point(0.0, 0.0, 1.0)), "Bad normal to triangle");
+        assertEquals(new Vector(sqrt3, sqrt3, sqrt3), pl.getNormal(new Point(0.0, 0.0, 1.0)), "Bad normal to triangle"); // Bad normal to polygon?????????????
     }
 }

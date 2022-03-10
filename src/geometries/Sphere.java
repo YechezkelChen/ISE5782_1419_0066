@@ -20,6 +20,9 @@ public class Sphere implements Geometry{
      * @param radius radius of sphere
      */
     public Sphere(Point center, double radius) {
+        if (radius <= 0)
+            throw new IllegalArgumentException("The radius must to be bigger than 0");
+
         this.center = center;
         this.radius = radius;
     }
@@ -48,6 +51,10 @@ public class Sphere implements Geometry{
      */
     @Override
     public Vector getNormal(Point point) {
-        return null;
+        // Finding the normal according to the formula:
+        // n = normalize(P - O)
+        // O = center of sphere
+
+        return point.subtract(this.center).normalize();
     }
 }

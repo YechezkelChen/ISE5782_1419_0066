@@ -1,5 +1,7 @@
 package primitives;
 
+import static primitives.Util.*;
+
 /**
  * This class will serve all primitive classes based on vectors
  * A vector is a point with three number values
@@ -73,6 +75,7 @@ public class Vector extends Point {
         double dotProduct = this.dotProduct(vector);
         if (dotProduct == this.length() * vector.length() || dotProduct == -this.length() * vector.length())
             throw new IllegalArgumentException("ERROR: If two vectors are parallel return the zero vector");
+
         return new Vector(
                 this.xyz.d2 * vector.xyz.d3 - this.xyz.d3 * vector.xyz.d2,
                 this.xyz.d3 * vector.xyz.d1 - this.xyz.d1 * vector.xyz.d3,
@@ -87,11 +90,7 @@ public class Vector extends Point {
      * @return Scalar after the multiply
      */
     public double dotProduct(Vector vector) {
-        // We test whether two vectors are orthogonal, If two vectors are orthogonal we throw exception
-        // if the result of the cross-product is zero the vectors are orthogonal
         Double3 xyz = this.xyz.product(vector.xyz);
-        if (xyz.equals(xyz.ZERO))
-            throw new IllegalArgumentException("ERROR: two vectors are orthogonal ");
         return xyz.d1 + xyz.d2 + xyz.d3;
     }
 

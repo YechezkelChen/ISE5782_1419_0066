@@ -17,13 +17,25 @@ public class Plane implements Geometry{
      * Calculates the normal and inserts the normal vector,
      * also the constructor saves the first point as the reference point of the plane
      *
-     * @param vertex1 first point value
-     * @param vertex2 second point value
-     * @param vertex3 third point value
+     * @param p1 first point value
+     * @param p2 second point value
+     * @param p3 third point value
      */
-    public Plane(Point vertex1, Point vertex2, Point vertex3) {
-        this.q0 = vertex1;
-        this.normal = getNormal(q0);
+    public Plane(Point p1, Point p2, Point p3) {
+        // Check that the three points are different from each other
+        if(p1.equals(p2) || p1.equals(p3) || p2.equals(p3)) {
+            throw new IllegalArgumentException("All points should be different");
+        }
+
+        this.q0 = p1;
+        Vector v1 = p1.subtract(p2);
+        Vector v2 = p2.subtract(p3);
+        try {
+            this.normal = v1.crossProduct(v2).normalize();
+        }
+        catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException(ex);
+        }
     }
 
     /**
@@ -60,7 +72,5 @@ public class Plane implements Geometry{
      * @return the normal vector (vertical) to the body at this point.
      */
     @Override
-    public Vector getNormal(Point point) {
-        return null;
-    }
+    public Vector getNormal(Point point) {return this.normal;}
 }

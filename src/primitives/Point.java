@@ -68,6 +68,11 @@ public class Point {
      * @return distance between the two points squared
      */
     public double distanceSquared(Point point) {
+        // if this is the same point the distance is 0
+        // we are doing this because the zero vector
+        if(this.equals(point))
+            return 0;
+
         Point newPoint = this.subtract(point);
         double x = newPoint.xyz.d1;
         double y = newPoint.xyz.d2;
