@@ -28,10 +28,10 @@ public class CylinderTest {
         assertEquals(new Vector(0.0, -1.0, 0.0), cylinder.getNormal(new Point(1.0, 0.0, 1.0)), "Bad normal to the side of the cylinder");
 
         // =============== Boundary Values Tests ==================
-        //TC10: Test with point in the center of top edge of the cylinder
+        //TC11: Test with point in the center of top edge of the cylinder
         assertEquals(new Vector(0.0, 0.0, 1.0), cylinder.getNormal(new Point(1.0, 0.0, 3.0)), "Bad normal to the top-edge of the cylinder");
 
-        //TC11: Test with point in the center of bottom edge of the cylinder
+        //TC12: Test with point in the center of bottom edge of the cylinder
         assertEquals(new Vector(0.0, 0.0, -1.0), cylinder.getNormal(new Point(0.0, 1.0, 0.0)), "Bad normal to the bottom-edge of the cylinder");
     }
 }

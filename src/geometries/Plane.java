@@ -23,9 +23,8 @@ public class Plane implements Geometry{
      */
     public Plane(Point p1, Point p2, Point p3) {
         // Check that the three points are different from each other
-        if(p1.equals(p2) || p1.equals(p3) || p2.equals(p3)) {
+        if(p1.equals(p2) || p1.equals(p3) || p2.equals(p3))
             throw new IllegalArgumentException("All points should be different");
-        }
 
         this.q0 = p1;
         Vector v1 = p1.subtract(p2);
@@ -33,8 +32,10 @@ public class Plane implements Geometry{
         try {
             this.normal = v1.crossProduct(v2).normalize();
         }
-        catch (IllegalArgumentException ex) {
-            throw new IllegalArgumentException(ex);
+        // Check that the three points not on the same line
+        catch (IllegalArgumentException e) {
+            // If the 3 points are on the same line a crossProduct will give the 0 vector and an exception is thrown
+            throw new IllegalArgumentException("The 3 points are on the same line");
         }
     }
 
