@@ -118,10 +118,6 @@ public class Vector extends Point {
      * @return a new vector normalized in the same direction as the original vector
      */
     public Vector normalize() {
-        double length = this.length();
-        if(length == 0)
-            throw new IllegalArgumentException ("ERROR: can not divided by zero");
-
-        return this.scale(1 / length);
+        return new Vector(this.xyz.reduce(this.length()));
     }
 }

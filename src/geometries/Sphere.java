@@ -2,6 +2,8 @@ package geometries;
 
 import primitives.*;
 
+import java.util.List;
+
 /**
  * Sphere class represents geometric body composed of
  * points in space whose distance from a fixed point is
@@ -56,5 +58,16 @@ public class Sphere implements Geometry{
         // O = center of sphere
 
         return point.subtract(this.center).normalize();
+    }
+
+    /**
+     * Given a ray, find all the points where the ray intersects the sphere
+     *
+     * @param ray The ray to test for intersections.
+     * @return A list of points.
+     */
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        return null;
     }
 }

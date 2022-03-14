@@ -3,8 +3,8 @@ package geometries;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import geometries.*;
 import primitives.*;
+import primitives.Util.*;
 
 /**
  * Testing Polygons
@@ -71,5 +71,17 @@ public class PolygonTests {
         Polygon pl = new Polygon(new Point(0.0, 0.0, 1.0), new Point(1.0, 0.0, 0.0), new Point(0.0, 1.0, 0.0), new Point(-1.0, 1.0, 1.0));
         double sqrt3 = Math.sqrt(1d / 3);
         assertEquals(new Vector(sqrt3, sqrt3, sqrt3), pl.getNormal(new Point(0.0, 0.0, 1.0)), "Bad normal to triangle"); // Bad normal to polygon?????????????
+    }
+
+    @Test
+    /**
+     * Test method for {@link geometries.Polygon.FindIntersections(primitives.Ray)}
+     */
+    void testFindIntersections() {
+        // ============ Equivalence Partitions Tests ==============
+        // TC01:
+
+        // =============== Boundary Values Tests ==================
+        // TC11:
     }
 }

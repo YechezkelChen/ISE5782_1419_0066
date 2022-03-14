@@ -2,6 +2,8 @@ package geometries;
 
 import primitives.*;
 
+import java.util.List;
+
 /**
  * Plane class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
@@ -74,4 +76,15 @@ public class Plane implements Geometry{
      */
     @Override
     public Vector getNormal(Point point) {return this.normal;}
+
+    /**
+     * Given a ray, find all the points where the ray intersects the sphere
+     *
+     * @param ray The ray to test for intersections.
+     * @return A list of points.
+     */
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        return null;
+    }
 }

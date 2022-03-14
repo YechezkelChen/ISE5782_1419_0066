@@ -6,7 +6,7 @@ import primitives.*;
  * Geometry interface represents all the shapes we work with
  *
  */
-public interface Geometry {
+public interface Geometry extends Intersectable{
 
     /**
      * returns the normal vector (vertical) to the body at the point.

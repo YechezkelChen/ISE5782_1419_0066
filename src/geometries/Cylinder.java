@@ -1,6 +1,9 @@
 package geometries;
 
 import primitives.*;
+
+import java.util.List;
+
 import static primitives.Util.*;
 
 /**
@@ -70,5 +73,17 @@ public class Cylinder extends Tube {
 
         Point O = P0.add(v.scale(t));
         return P.subtract(O).normalize();
+    }
+
+
+    /**
+     * Given a ray, find all the points where the ray intersects the sphere
+     *
+     * @param ray The ray to test for intersections.
+     * @return A list of points.
+     */
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        return null;
     }
 }

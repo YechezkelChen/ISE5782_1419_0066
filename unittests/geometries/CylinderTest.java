@@ -2,6 +2,7 @@ package geometries;
 
 import org.junit.jupiter.api.Test;
 import primitives.*;
+import primitives.Util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 /**
@@ -33,5 +34,17 @@ public class CylinderTest {
 
         //TC12: Test with point in the center of bottom edge of the cylinder
         assertEquals(new Vector(0.0, 0.0, -1.0), cylinder.getNormal(new Point(0.0, 1.0, 0.0)), "Bad normal to the bottom-edge of the cylinder");
+    }
+
+    @Test
+    /**
+     * Test method for {@link geometries.Cylinder.FindIntersections(primitives.Ray)}
+     */
+    void testFindIntersections() {
+        // ============ Equivalence Partitions Tests ==============
+        // TC01:
+
+        // =============== Boundary Values Tests ==================
+        // TC11:
     }
 }
