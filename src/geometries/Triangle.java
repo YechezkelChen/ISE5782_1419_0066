@@ -4,11 +4,12 @@ import primitives.*;
 
 import java.util.List;
 
+import static primitives.Util.isZero;
+
 /**
  * Triangle class represents a polygon with three points
- *
  */
-public class Triangle extends Polygon{
+public class Triangle extends Polygon {
 
     /**
      * Constructor to initialize Triangle based on Polygon with 3 points

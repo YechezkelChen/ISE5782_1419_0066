@@ -101,6 +101,45 @@ public class Polygon implements Geometry {
 	 */
 	@Override
 	public List<Point> findIntersections(Ray ray) {
-		return null;
+
+		List<Point> result = plane.findIntersections(ray);
+
+		if (result == null) {
+			return null; // no Intersections at all in the plane
+		}
+
+		int numOfVertices = vertices.size();
+		Point p0 = ray.getP0();
+		Vector dir = ray.getDir();
+
+		Vector v1 = vertices.get(numOfVertices - 1).subtract(p0);
+		Vector v2 = vertices.get(0).subtract(p0);
+
+		Vector normalize = v1.crossProduct(v2).normalize();
+		double vn = dir.dotProduct(normalize);
+		boolean positive = vn > 0;
+
+		if (isZero(vn)) {
+			return null;
+		}
+
+		for (int i = 1; i < numOfVertices; ++i) {
+			v1 = v2;
+			v2 = vertices.get(i).subtract(p0);
+			normalize = v1.crossProduct(v2).normalize();
+			vn = dir.dotProduct(normalize);
+
+			//no intersection
+			if (isZero(vn)) {
+				return null;
+			}
+
+			//not the same sign
+			if (vn > 0 != positive) {
+				return null;
+			}
+		}
+
+		return result;//dont know wate to return
 	}
 }

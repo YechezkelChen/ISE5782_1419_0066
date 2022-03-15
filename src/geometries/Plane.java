@@ -4,13 +4,14 @@ import primitives.*;
 
 import java.util.List;
 
+import static primitives.Util.isZero;
+
 /**
  * Plane class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
  * A plane is defined by a point and a normal vector
- *
  */
-public class Plane implements Geometry{
+public class Plane implements Geometry {
 
     private final Point q0;
     private final Vector normal;
@@ -25,7 +26,7 @@ public class Plane implements Geometry{
      */
     public Plane(Point p1, Point p2, Point p3) {
         // Check that the three points are different from each other
-        if(p1.equals(p2) || p1.equals(p3) || p2.equals(p3))
+        if (p1.equals(p2) || p1.equals(p3) || p2.equals(p3))
             throw new IllegalArgumentException("All points should be different");
 
         this.q0 = p1;
@@ -44,7 +45,7 @@ public class Plane implements Geometry{
     /**
      * Constructor to initialize Plane based object with point and normal vector
      *
-     * @param q0 point
+     * @param q0     point
      * @param normal vector
      */
     public Plane(Point q0, Vector normal) {
@@ -75,7 +76,9 @@ public class Plane implements Geometry{
      * @return the normal vector (vertical) to the body at this point.
      */
     @Override
-    public Vector getNormal(Point point) {return this.normal;}
+    public Vector getNormal(Point point) {
+        return this.normal;
+    }
 
     /**
      * Given a ray, find all the points where the ray intersects the sphere
@@ -85,6 +88,39 @@ public class Plane implements Geometry{
      */
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        //t=n*(q0-Po)/n*v
+        Vector v = ray.getDir();
+        Point p0 = ray.getP0();
+
+        //Ray on the plane
+        if (q0.equals(p0)) {
+            return null;
+        }
+
+        double nqp = normal.dotProduct(q0.subtract(p0));
+        //Ray on the plane
+        if (isZero(nqp)) {
+            return null;
+        }
+
+        double nv = normal.dotProduct(v);
+
+        if (isZero(nv)) {
+            return null;
+        }
+
+        double t = nqp / nv;
+
+        //Ray after the plane
+        if (t < 0) {
+            return null;
+        }
+
+        Point P = ray.getPoint(t);
+
+
+        //Ray crosses the plane
+
+        return List.of(new Point(this.getQ0(), P,));//dont know
     }
 }

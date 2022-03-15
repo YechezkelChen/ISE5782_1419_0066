@@ -1,5 +1,7 @@
 package primitives;
 
+import static primitives.Util.isZero;
+
 /**
  * This class will serve all primitive classes based on rays
  * A ray is defined by a point and a vector
@@ -27,6 +29,19 @@ public class Ray {
     public Vector getDir() {
         return dir;
     }
+
+    public Point getPoint(double t)
+    {
+        try {//P= P0 + t*v
+            Vector v= dir.scale(t);
+            isZero(v.length());
+            return p0.add(v);
+        }
+        catch (Exception exception) {
+            return p0;
+        }
+    }
+
 
     @Override
     public boolean equals(Object o) {

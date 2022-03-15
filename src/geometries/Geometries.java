@@ -12,7 +12,10 @@ public class Geometries implements Intersectable{
 
     public Geometries() {
         this.geometries = new LinkedList<Intersectable>();
-    }
+    }//The goal is to create a union between them all, we would prefer a linked list
+    // where everyone points to the other than working by indexes,
+    // which will be useful while running in the transition from 1 to the second
+    // and not by accessing a direct index that at best takes us an O of n to find it
 
     public Geometries(Intersectable... geometries) {
 
