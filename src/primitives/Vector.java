@@ -70,12 +70,6 @@ public class Vector extends Point {
      * @return a new vector that is perpendicular to the two existing vectors
      */
     public Vector crossProduct(Vector vector) {
-        // We test whether two vectors are parallel, If two vectors are parallel return the zero vector
-        //Check this by the formula: a || b <==> a * b = +-|a||b|
-        double dotProduct = this.dotProduct(vector);
-        if (dotProduct == this.length() * vector.length() || dotProduct == -this.length() * vector.length())
-            throw new IllegalArgumentException("ERROR: If two vectors are parallel return the zero vector");
-
         return new Vector(
                 this.xyz.d2 * vector.xyz.d3 - this.xyz.d3 * vector.xyz.d2,
                 this.xyz.d3 * vector.xyz.d1 - this.xyz.d1 * vector.xyz.d3,

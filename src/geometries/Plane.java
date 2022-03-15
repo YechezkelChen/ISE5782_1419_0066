@@ -1,10 +1,11 @@
 package geometries;
 
 import primitives.*;
+import primitives.Vector;
 
-import java.util.List;
+import java.util.*;
 
-import static primitives.Util.isZero;
+import static primitives.Util.*;
 
 /**
  * Plane class represents two-dimensional polygon in 3D Cartesian coordinate
@@ -92,35 +93,29 @@ public class Plane implements Geometry {
         Vector v = ray.getDir();
         Point p0 = ray.getP0();
 
-        //Ray on the plane
-        if (q0.equals(p0)) {
+        //if the ray on the plane, there is no intersections points
+        if (q0.equals(p0))
             return null;
-        }
 
         double nqp = normal.dotProduct(q0.subtract(p0));
-        //Ray on the plane
-        if (isZero(nqp)) {
+        //if the ray on the plane, there is no intersections points
+        if (isZero(nqp))
             return null;
-        }
 
         double nv = normal.dotProduct(v);
-
-        if (isZero(nv)) {
+        //if this is zero the denominator is zero, and this is illegal
+        if (isZero(nv))
             return null;
-        }
 
         double t = nqp / nv;
 
-        //Ray after the plane
-        if (t < 0) {
+        //if the ray after the plane, there is no intersections points
+        if (t < 0)
             return null;
-        }
 
         Point P = ray.getPoint(t);
 
-
-        //Ray crosses the plane
-
-        return List.of(new Point(this.getQ0(), P,));//dont know
+        //the ray crosses the plane
+        return List.of(new Point(this.getQ0(), P, ));//dont know
     }
 }

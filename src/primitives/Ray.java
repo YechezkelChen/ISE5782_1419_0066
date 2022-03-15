@@ -1,11 +1,10 @@
 package primitives;
 
-import static primitives.Util.isZero;
+import static primitives.Util.*;
 
 /**
  * This class will serve all primitive classes based on rays
  * A ray is defined by a point and a vector
- *
  */
 public class Ray {
     private final Point p0;
@@ -14,12 +13,12 @@ public class Ray {
     /**
      * Constructor to initialize Ray based point and vector
      *
-     * @param p0 the point in Ray
+     * @param p0  the point in Ray
      * @param dir the vector in Ray
      */
     public Ray(Point p0, Vector dir) {
         this.p0 = new Point(p0.xyz.d1, p0.xyz.d2, p0.xyz.d3);
-        this.dir  = dir.normalize();
+        this.dir = dir.normalize();
     }
 
     public Point getP0() {
@@ -30,18 +29,13 @@ public class Ray {
         return dir;
     }
 
-    public Point getPoint(double t)
-    {
-        try {//P= P0 + t*v
-            Vector v= dir.scale(t);
-            isZero(v.length());
-            return p0.add(v);
-        }
-        catch (Exception exception) {
+    public Point getPoint(double t) {
+        //P= P0 + t*v
+        if(isZero(t))
             return p0;
-        }
-    }
 
+        return p0.add(dir.scale(t));
+    }
 
     @Override
     public boolean equals(Object o) {

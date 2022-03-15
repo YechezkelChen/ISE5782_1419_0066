@@ -2,9 +2,9 @@ package geometries;
 
 import primitives.*;
 
-import java.util.List;
+import java.util.*;
 
-import static primitives.Util.isZero;
+import static primitives.Util.*;
 
 /**
  * Triangle class represents a polygon with three points

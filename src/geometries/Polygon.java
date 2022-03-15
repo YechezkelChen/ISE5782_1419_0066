@@ -101,12 +101,9 @@ public class Polygon implements Geometry {
 	 */
 	@Override
 	public List<Point> findIntersections(Ray ray) {
-
-		List<Point> result = plane.findIntersections(ray);
-
-		if (result == null) {
+		List<Point> intersectionsPoints = plane.findIntersections(ray);
+		if (intersectionsPoints == null)
 			return null; // no Intersections at all in the plane
-		}
 
 		int numOfVertices = vertices.size();
 		Point p0 = ray.getP0();
@@ -115,31 +112,28 @@ public class Polygon implements Geometry {
 		Vector v1 = vertices.get(numOfVertices - 1).subtract(p0);
 		Vector v2 = vertices.get(0).subtract(p0);
 
-		Vector normalize = v1.crossProduct(v2).normalize();
-		double vn = dir.dotProduct(normalize);
+		Vector n = v1.crossProduct(v2).normalize();
+		double vn = dir.dotProduct(n);
 		boolean positive = vn > 0;
 
-		if (isZero(vn)) {
+		if (isZero(vn))
 			return null;
-		}
 
 		for (int i = 1; i < numOfVertices; ++i) {
 			v1 = v2;
 			v2 = vertices.get(i).subtract(p0);
-			normalize = v1.crossProduct(v2).normalize();
-			vn = dir.dotProduct(normalize);
+			n = v1.crossProduct(v2).normalize();
+			vn = dir.dotProduct(n);
 
 			//no intersection
-			if (isZero(vn)) {
+			if (isZero(vn))
 				return null;
-			}
 
 			//not the same sign
-			if (vn > 0 != positive) {
+			if (vn > 0 != positive)
 				return null;
-			}
 		}
 
-		return result;//dont know wate to return
+		return intersectionsPoints;//dont know wate to return
 	}
 }

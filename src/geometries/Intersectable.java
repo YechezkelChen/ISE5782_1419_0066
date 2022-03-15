@@ -9,7 +9,6 @@ import primitives.*;
  */
 public interface Intersectable {
 
-
     /**
      * Given a ray, find all the points where the ray intersects the sphere
      *

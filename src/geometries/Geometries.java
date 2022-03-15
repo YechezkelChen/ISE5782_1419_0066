@@ -1,21 +1,23 @@
 package geometries;
 
-import primitives.Point;
-import primitives.Ray;
+import primitives.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
+/**
+ * This class is used to store the geometries of the objects in the scene.
+ */
 public class Geometries implements Intersectable{
+    /**
+     * The goal is to create a union between them all, we would prefer a linked list
+     * where everyone points to the other than working by indexes,
+     * which will be useful while running in the transition from 1 to the second
+     * and not by accessing a direct index that at best takes us an O of n to find it
+     */
     private List<Intersectable> geometries;
 
     public Geometries() {
-        this.geometries = new LinkedList<Intersectable>();
-    }//The goal is to create a union between them all, we would prefer a linked list
-    // where everyone points to the other than working by indexes,
-    // which will be useful while running in the transition from 1 to the second
-    // and not by accessing a direct index that at best takes us an O of n to find it
+        this.geometries = new LinkedList<>();
+    }
 
     public Geometries(Intersectable... geometries) {
 
