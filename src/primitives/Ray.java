@@ -34,7 +34,7 @@ public class Ray {
         if(isZero(t))
             return p0;
 
-        return p0.add(dir.scale(t));
+        return p0.add(dir.scale(alignZero(t)));
     }
 
     @Override

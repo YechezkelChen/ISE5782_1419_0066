@@ -90,19 +90,19 @@ public class Plane implements Geometry {
     @Override
     public List<Point> findIntersections(Ray ray) {
         //t=n*(q0-Po)/n*v
-        Vector v = ray.getDir();
         Point p0 = ray.getP0();
+        Vector v = ray.getDir();
 
         //if the ray on the plane, there is no intersections points
-        if (q0.equals(p0))
+        if (this.q0.equals(p0))
             return null;
 
-        double nqp = normal.dotProduct(q0.subtract(p0));
+        double nqp = this.normal.dotProduct(this.q0.subtract(p0));
         //if the ray on the plane, there is no intersections points
         if (isZero(nqp))
             return null;
 
-        double nv = normal.dotProduct(v);
+        double nv = this.normal.dotProduct(v);
         //if this is zero the denominator is zero, and this is illegal
         if (isZero(nv))
             return null;
@@ -110,12 +110,10 @@ public class Plane implements Geometry {
         double t = nqp / nv;
 
         //if the ray after the plane, there is no intersections points
-        if (t < 0)
+        if (t <= 0)
             return null;
 
-        Point P = ray.getPoint(t);
-
         //the ray crosses the plane
-        return List.of(new Point(this.getQ0(), P, ));//dont know
+        return List.of(ray.getPoint(t));
     }
 }

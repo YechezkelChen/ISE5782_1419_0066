@@ -1,12 +1,13 @@
 package geometries;
 
 import primitives.*;
+
 import java.util.*;
 
 /**
  * This class is used to store the geometries of the objects in the scene.
  */
-public class Geometries implements Intersectable{
+public class Geometries implements Intersectable {
     /**
      * The goal is to create a union between them all, we would prefer a linked list
      * where everyone points to the other than working by indexes,
@@ -20,12 +21,13 @@ public class Geometries implements Intersectable{
     }
 
     public Geometries(Intersectable... geometries) {
-
+        this.geometries = List.of(geometries);
     }
 
     public void add(Intersectable... geometries) {
-
+        this.geometries.addAll(List.of(geometries));
     }
+
     /**
      * Given a ray, find all the points where the ray intersects the sphere
      *
@@ -34,6 +36,19 @@ public class Geometries implements Intersectable{
      */
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        List<Point> intersections = null;
+
+        for (var geometry : this.geometries) {
+            List<Point> intersectionsPoints = geometry.findIntersections(ray);
+
+            if (intersectionsPoints != null) {
+                if (intersections == null)
+                    intersections = new LinkedList<>();
+
+                intersections.addAll(intersectionsPoints);
+            }
+        }
+
+        return intersections;
     }
 }
