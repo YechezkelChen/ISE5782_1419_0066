@@ -103,8 +103,8 @@ public class Camera {
         double Rx = this.width / nX;
 
         //Pixel[i,j] center
-        double yI = -(i - (nY - 1) / 2) * Ry;
-        double xJ = (j - (nX - 1) / 2) * Rx;
+        double yI = -(i - (nY - 1) / 2.0) * Ry;
+        double xJ = (j - (nX - 1) / 2.0) * Rx;
 
         Point pIJ = Pc;
         if (xJ != 0) pIJ = pIJ.add(vRight.scale(xJ));
