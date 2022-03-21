@@ -1,8 +1,6 @@
 package renderer;
 
 import primitives.*;
-import primitives.Vector;
-
 import static primitives.Util.*;
 
 
@@ -11,23 +9,22 @@ import static primitives.Util.*;
  */
 public class Camera {
 
-    private Point location;
+    private Point p0;
 
     private Vector vTo;
-
     private Vector vUp;
     private Vector vRight;
 
-    private double height;
     private double width;
+    private double height;
     private double distance;
-
-    public double getHeight() {
-        return height;
-    }
 
     public double getWidth() {
         return width;
+    }
+
+    public double getHeight() {
+        return height;
     }
 
     public double getDistance() {
@@ -38,30 +35,34 @@ public class Camera {
      * Constructs a camera with location, to and up vectors.
      * The right vector is being calculated by the "to" and "up" vectors.
      *
-     * @param location The camera's location.
+     * @param p0    The camera's location.
      * @param vTo         The direction to where the camera is looking.
      * @param vUp         The direction of the camera's upper direction.
      * @throws IllegalArgumentException When to and up vectors aren't orthogonal.
      */
-    public Camera(Point location, Vector vTo, Vector vUp) {
-        if (!isZero(vTo.dotProduct(vUp))) {
-            throw new IllegalArgumentException("Up vector is not Orthogonal with To vector");
-        }
-        this.location = location;
+    public Camera(Point p0, Vector vTo, Vector vUp) {
+        if (!isZero(vTo.dotProduct(vUp)))
+            throw new IllegalArgumentException("vectorTo and vectorUp are not orthogonal");
+
+        this.p0 = p0;
         this.vTo = vTo.normalize();
         this.vUp = vUp.normalize();
         this.vRight = vTo.crossProduct(vUp).normalize();
     }
 
-
     /**
-     * This function sets the width and height of the viewport
+     * This function sets the width and height of the view-plane.
      *
-     * @param width  The width of the viewport in pixels.
-     * @param height the height of the viewport in pixels
-     * @return Nothing.
+     * @param width  The width of the view-plane.
+     * @param height the height of the view-plane.
+     * @return the view-plane.
      */
     public Camera setVPSize(double width, double height) {
+        if (width < 0)
+            throw new IllegalArgumentException("width must have >= 0");
+        if (height < 0)
+            throw new IllegalArgumentException("height must have >= 0");
+
         this.width = width;
         this.height = height;
         return this;
@@ -85,9 +86,9 @@ public class Camera {
     /**
      * Construct a ray from the given pixel to the center of the image
      *
-     * @param nX The x-coordinate of the pixel in the image.
-     * @param nY The y-coordinate of the pixel in the image.
-     * @param j The y-coordinate of the pixel in the image.
+     * @param nX The amount of columns (row width) of the pixel in the image.
+     * @param nY The amount of rows (column height) of the pixel in the image.
+     * @param j The column of the pixel in the image.
      * @param i The row of the pixel in the image.
      * @return Nothing
      */
