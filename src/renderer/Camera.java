@@ -1,6 +1,7 @@
 package renderer;
 
 import primitives.*;
+
 import static primitives.Util.*;
 
 
@@ -35,9 +36,9 @@ public class Camera {
      * Constructs a camera with location, to and up vectors.
      * The right vector is being calculated by the "to" and "up" vectors.
      *
-     * @param p0    The camera's location.
-     * @param vTo         The direction to where the camera is looking.
-     * @param vUp         The direction of the camera's upper direction.
+     * @param p0  The camera's location.
+     * @param vTo The direction to where the camera is looking.
+     * @param vUp The direction of the camera's upper direction.
      * @throws IllegalArgumentException When to and up vectors aren't orthogonal.
      */
     public Camera(Point p0, Vector vTo, Vector vUp) {
@@ -88,12 +89,30 @@ public class Camera {
      *
      * @param nX The amount of columns (row width) of the pixel in the image.
      * @param nY The amount of rows (column height) of the pixel in the image.
-     * @param j The column of the pixel in the image.
-     * @param i The row of the pixel in the image.
+     * @param j  The column of the pixel in the image.
+     * @param i  The row of the pixel in the image.
      * @return Nothing
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
-        return null;
+
+        // Image center
+        Point Pc = this.p0.add(this.vTo.scale(this.distance));
+
+        //Ratio (pixel width & height)
+        double Ry = this.height / nY;
+        double Rx = this.width / nX;
+
+        //Pixel[i,j] center
+        double yI = -(i - (nY - 1) / 2) * Ry;
+        double xJ = (j - (nX - 1) / 2) * Rx;
+
+        Point pIJ = Pc;
+        if (xJ != 0) pIJ = pIJ.add(vRight.scale(xJ));
+        if (yI != 0) pIJ = pIJ.add(vUp.scale(yI));
+
+        Vector vIJ = pIJ.subtract(this.p0);
+
+        return new Ray(this.p0, vIJ);
     }
 
 
