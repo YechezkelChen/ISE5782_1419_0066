@@ -55,5 +55,4 @@ class CameraTest {
                 camera.setVPSize(8, 8).constructRay(4, 4, 1, 0), badRay);
 
     }
-
 }
