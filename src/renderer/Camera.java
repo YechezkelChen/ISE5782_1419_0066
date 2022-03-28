@@ -1,7 +1,9 @@
 package renderer;
 
 import primitives.*;
+import primitives.Vector;
 
+import java.util.*;
 import static primitives.Util.*;
 
 
@@ -19,6 +21,9 @@ public class Camera {
     private double width;
     private double height;
     private double distance;
+
+    private ImageWriter imgWriter;
+    private RayTracerBase rayTracer;
 
     public Point getP0() {
         return p0;
@@ -99,6 +104,16 @@ public class Camera {
         return this;
     }
 
+    public Camera setImgWriter(ImageWriter imgWriter) {
+        this.imgWriter = imgWriter;
+        return this;
+    }
+
+    public Camera setRayTracer(RayTracerBase rayTracer) {
+        this.rayTracer = rayTracer;
+        return this;
+    }
+
     /**
      * Construct a ray from the image center to the pixel at (i,j)
      *
@@ -127,5 +142,29 @@ public class Camera {
         Vector vIJ = pIJ.subtract(this.p0);
 
         return new Ray(this.p0, vIJ);
+    }
+
+    /**
+     * This function is responsible for rendering the image
+     */
+    public void renderImage(){
+        try {
+            if(this.imgWriter == null)
+                throw new MissingResourceException("Missing resource", ImageWriter.class.getName(), "");
+            if (this.rayTracer == null)
+                throw new MissingResourceException("Missing resource", RayTracerBase.class.getName(), "");
+
+        }
+        catch (MissingResourceException e){
+            throw new UnsupportedOperationException("Render didn't receive " + e.getClassName());
+        }
+    }
+
+    public void printGrid(int interval, Color color){
+
+    }
+
+    public void writeToImage(){
+
     }
 }
