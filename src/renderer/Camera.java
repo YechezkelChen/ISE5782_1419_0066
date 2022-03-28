@@ -20,6 +20,22 @@ public class Camera {
     private double height;
     private double distance;
 
+    public Point getP0() {
+        return p0;
+    }
+
+    public Vector getvTo() {
+        return vTo;
+    }
+
+    public Vector getvUp() {
+        return vUp;
+    }
+
+    public Vector getvRight() {
+        return vRight;
+    }
+
     public double getWidth() {
         return width;
     }
@@ -59,10 +75,10 @@ public class Camera {
      * @return the view-plane.
      */
     public Camera setVPSize(double width, double height) {
-        if (width < 0)
-            throw new IllegalArgumentException("width must have >= 0");
-        if (height < 0)
-            throw new IllegalArgumentException("height must have >= 0");
+        if (width <= 0)
+            throw new IllegalArgumentException("width must have > 0");
+        if (height <= 0)
+            throw new IllegalArgumentException("height must have > 0");
 
         this.width = width;
         this.height = height;
@@ -76,25 +92,23 @@ public class Camera {
      * @return Nothing.
      */
     public Camera setVPDistance(double distance) {
-        if (distance < 0)
-            throw new IllegalArgumentException("distance must have >= 0");
+        if (distance <= 0)
+            throw new IllegalArgumentException("distance must have > 0");
 
         this.distance = distance;
         return this;
     }
 
-
     /**
-     * Construct a ray from the given pixel to the center of the image
+     * Construct a ray from the image center to the pixel at (i,j)
      *
      * @param nX The amount of columns (row width) of the pixel in the image.
      * @param nY The amount of rows (column height) of the pixel in the image.
      * @param j  The column of the pixel in the image.
      * @param i  The row of the pixel in the image.
-     * @return Nothing
+     * @return A construct ray.
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
-
         // Image center
         Point Pc = this.p0.add(this.vTo.scale(this.distance));
 
@@ -114,6 +128,4 @@ public class Camera {
 
         return new Ray(this.p0, vIJ);
     }
-
-
 }
