@@ -4,6 +4,7 @@ import primitives.*;
 import primitives.Vector;
 
 import java.util.*;
+
 import static primitives.Util.*;
 
 
@@ -22,7 +23,7 @@ public class Camera {
     private double height;
     private double distance;
 
-    private ImageWriter imgWriter;
+    private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
 
     public Point getP0() {
@@ -104,8 +105,8 @@ public class Camera {
         return this;
     }
 
-    public Camera setImgWriter(ImageWriter imgWriter) {
-        this.imgWriter = imgWriter;
+    public Camera setImageWriter(ImageWriter imageWriter) {
+        this.imageWriter = imageWriter;
         return this;
     }
 
@@ -145,26 +146,76 @@ public class Camera {
     }
 
     /**
-     * This function is responsible for rendering the image
+     * If the image writer is null, throw an exception
      */
-    public void renderImage(){
-        try {
-            if(this.imgWriter == null)
-                throw new MissingResourceException("Missing resource", ImageWriter.class.getName(), "");
-            if (this.rayTracer == null)
-                throw new MissingResourceException("Missing resource", RayTracerBase.class.getName(), "");
+    private void checkImgWriter() {
+        if (this.imageWriter == null)
+            throw new MissingResourceException("Missing resource", ImageWriter.class.getName(), "");
+    }
 
-        }
-        catch (MissingResourceException e){
+    /**
+     * If the rayTracer is null, throw an exception
+     */
+    private void checkRayTracer() {
+        if (this.rayTracer == null)
+            throw new MissingResourceException("Missing resource", ImageWriter.class.getName(), "");
+    }
+
+    /**
+     * Given a pixel's coordinates, construct a ray and trace it through the scene
+     *
+     * @param nX The amount of columns (row width) of the pixel in the image.
+     * @param nY The amount of rows (column height) of the pixel in the image.
+     * @param j  The column of the pixel in the image.
+     * @param i  The row of the pixel in the image.
+     * @return The color of the pixel.
+     */
+    private Color castRay(int nX, int nY, int j, int i) {
+        Ray ray = this.constructRay(nX, nY, j, i);
+        return this.rayTracer.traceRay(ray);
+    }
+
+    /**
+     * It checks that the image writer and ray tracer are available.
+     */
+    public void renderImage() {
+        try {
+            this.checkImgWriter();
+            this.checkRayTracer();
+        } catch (MissingResourceException e) {
             throw new UnsupportedOperationException("Render didn't receive " + e.getClassName());
         }
+        for (int i = 0; i < this.imageWriter.getNx(); i++)
+            for (int j = 0; j < this.imageWriter.getNy(); j++) {
+                //build for every pixel is
+                Color pixelColor = this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), j, i);
+                this.imageWriter.writePixel(j, i, pixelColor);
+            }
     }
 
-    public void printGrid(int interval, Color color){
-
+    /**
+     * This function takes in an interval and a color and prints out a grid of the given color
+     *
+     * @param interval the interval at which the grid will be drawn
+     * @param color    the color of the grid lines
+     */
+    public void printGrid(int interval, Color color) {
+        this.checkImgWriter();//ask yair!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        for (int i = 0; i < this.imageWriter.getNy(); i++)
+            for (int j = 0; j < this.imageWriter.getNx(); j++) {
+                //Paint only the grid lines
+                //Leaves the background as it was
+                if (i % interval == 0 || j % interval == 0)
+                    this.imageWriter.writePixel(j, i, color);
+            }
     }
 
-    public void writeToImage(){
-
+    /**
+     * It checks if the image writer is ready to write to the image.
+     * If it is, it calls the writeToImage function of the image writer
+     */
+    public void writeToImage() {
+        this.checkImgWriter();//ask yair!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        this.imageWriter.writeToImage();
     }
 }

@@ -5,7 +5,10 @@ import primitives.Point;
 import primitives.Ray;
 import scene.Scene;
 
-public class RayTracerBasic extends RayTracerBase{
+import java.util.LinkedList;
+import java.util.List;
+
+public class RayTracerBasic extends RayTracerBase {
     /**
      * This is the constructor for the RayTracerBasic class. It calls the constructor for the RayTracerBase class.
      */
@@ -13,18 +16,31 @@ public class RayTracerBasic extends RayTracerBase{
         super(scene);
     }
 
+
     /**
-     * Given a ray, return the color of the object that the ray hits
+     * Given a ray, find the closest point of intersection with the scene, and return the color of that point
      *
-     * @param ray The ray that is being traced.
-     * @return The color of the object that the ray hits.
+     * @param ray The ray that we're tracing.
+     * @return The color of the closest point.
      */
     @Override
     public Color traceRay(Ray ray) {
-        return null;
+        List<Point> intersectionPoints = this.scene.geometries.findIntersections(ray);
+        if (intersectionPoints == null)
+            return scene.background;
+        else {
+            Point closestPoint = ray.findClosestPoint(intersectionPoints);
+            return this.calcColor(closestPoint);
+        }
     }
 
-    public Color calcColor(Point point){
-        return null;
+    /**
+     * Calculate the color of the point
+     *
+     * @param point The point in 3D space where the ray is originating from.
+     * @return The color of the ambient light.
+     */
+    private Color calcColor(Point point) {
+        return this.scene.ambientLight.getIntensity();
     }
 }
