@@ -1,5 +1,7 @@
 package primitives;
 
+import geometries.Intersectable.GeoPoint;
+
 import java.util.*;
 
 import static primitives.Util.*;
@@ -68,22 +70,53 @@ public class Ray {
      * @return The closest point to the head point of ray.
      */
     public Point findClosestPoint(List<Point> points) {
-        if(points == null || points.size() == 0)
+        return points == null ? null
+                : findClosestGeoPoint(points.stream().map(p -> new GeoPoint(null, p)).toList()
+        ).point;
+        /**
+         *  if (points == null || points.size() == 0)
+         *             return null;
+         *
+         *         // 2 variables help
+         *         Point closePoint = points.get(0);
+         *         double minDistance = this.p0.distance(closePoint);
+         *         double distance;
+         *
+         *         for (var point : points) {
+         *             distance = this.p0.distance(point);
+         *             if (distance < minDistance) {
+         *                 closePoint = point;
+         *                 minDistance = distance;
+         *             }
+         *         }
+         *
+         *         return closePoint;*/ //the old one
+    }
+
+    /**
+     * Find the closest geometry point
+     *
+     * @param points List of geometries points
+     * @return geometry point
+     */
+    public GeoPoint findClosestGeoPoint(List<GeoPoint> points) {
+        double minDistance = Double.MAX_VALUE;
+        double d;
+        GeoPoint closePoint = null;
+
+        if (points == null || points.size() == 0) {
             return null;
-
-        // 2 variables help
-        Point closePoint = points.get(0);
-        double minDistance = this.p0.distance(closePoint);
-        double distance;
-
-        for (var point : points) {
-            distance = this.p0.distance(point);
-            if (distance < minDistance) {
-                closePoint = point;
-                minDistance = distance;
-            }
         }
 
+        for (GeoPoint geoP : points) {
+
+            d = geoP.point.distance(p0);
+            //check if the distance of p is smaller then minDistance
+            if (d < minDistance) {
+                minDistance = d;
+                closePoint = geoP;
+            }
+        }
         return closePoint;
     }
 }

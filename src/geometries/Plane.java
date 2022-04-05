@@ -12,7 +12,7 @@ import static primitives.Util.*;
  * system
  * A plane is defined by a point and a normal vector
  */
-public class Plane implements Geometry {
+public class Plane extends Geometry {
 
     private final Point q0;
     private final Vector normal;
@@ -88,7 +88,7 @@ public class Plane implements Geometry {
      * @return A list of points.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
         //t=n*(q0-Po)/n*v
         Point p0 = ray.getP0();
         Vector v = ray.getDir();
@@ -113,7 +113,8 @@ public class Plane implements Geometry {
         if (t <= 0)
             return null;
 
+        Point point=ray.getPoint(t);
         //the ray crosses the plane
-        return List.of(ray.getPoint(t));
+        return List.of(new GeoPoint(this,point));
     }
 }

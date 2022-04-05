@@ -9,7 +9,7 @@ import static primitives.Util.*;
 /**
  * Tube class represents infinite cylinder with ray and radius
  */
-public class Tube implements Geometry {
+public class Tube extends Geometry {
 
     protected final Ray axisRay;
     protected final double radius;
@@ -77,7 +77,7 @@ public class Tube implements Geometry {
      * @return A list of points.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
         return null;
     }
 }

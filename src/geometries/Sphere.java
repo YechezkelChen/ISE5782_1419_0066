@@ -11,7 +11,7 @@ import static primitives.Util.*;
  * points in space whose distance from a fixed point is
  * at most a certain fixed number, called a radius.
  */
-public class Sphere implements Geometry {
+public class Sphere extends Geometry {
 
     private final Point center;
     private final double radius;
@@ -68,12 +68,12 @@ public class Sphere implements Geometry {
      * @return A list of points.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
         Point p0 = ray.getP0();
         Vector v = ray.getDir();
 
         if (p0.equals(this.center))
-            return List.of(ray.getPoint(radius));
+            return List.of(new GeoPoint(this, ray.getPoint(radius)));
 
         Vector u = this.center.subtract(p0);
         double tm = v.dotProduct(u);
@@ -87,13 +87,13 @@ public class Sphere implements Geometry {
         double t2 = alignZero(tm - th);
 
         if (t1 > 0 && t2 > 0)
-            return List.of(ray.getPoint(t1), ray.getPoint(t2));
+            return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2)));
 
         if (t1 > 0)
-            return List.of(ray.getPoint(t1));
+            return List.of(new GeoPoint(this, ray.getPoint(t1)));
 
         if (t2 > 0)
-            return List.of(ray.getPoint(t2));
+            return List.of(new GeoPoint(this, ray.getPoint(t2)));
 
         return null;
     }

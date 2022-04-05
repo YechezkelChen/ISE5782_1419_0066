@@ -5,8 +5,6 @@ import primitives.Vector;
 
 import java.util.*;
 
-import static primitives.Util.*;
-
 /**
  * Triangle class represents a polygon with three points
  */
@@ -30,8 +28,8 @@ public class Triangle extends Polygon {
      * @return A list of points.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
-        List<Point> result = this.plane.findIntersections(ray);
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
+        List<GeoPoint> result = this.plane.findGeoIntersections(ray);
 
         if (result == null)
             return null;
@@ -53,7 +51,7 @@ public class Triangle extends Polygon {
 
         //If all the products are the same sign, a point of intersection within the triangle
         if ((product1 > 0 && product2 > 0 && product3 > 0) || (product1 < 0 && product2 < 0 && product3 < 0))
-            return List.of(result.get(0));
+            return List.of(new GeoPoint(this, result.get(0).point));
 
         //1. If one product is zero the point on a rib or on the continuation of the rib
         //2. If 2 multiples are reset the point on one of the vertices of the triangle
