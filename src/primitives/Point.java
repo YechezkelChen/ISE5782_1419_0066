@@ -7,6 +7,7 @@ package primitives;
  */
 public class Point {
     final Double3 xyz;
+    public static final Point ZERO = new Point(Double3.ZERO);
 
     /**
      * Constructor to initialize Point based object with its three number values
