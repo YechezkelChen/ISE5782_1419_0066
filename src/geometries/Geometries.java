@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * This class is used to store the geometries of the objects in the scene.
  */
-public class Geometries implements Intersectable {
+public class Geometries extends Intersectable {
     /**
      * The goal is to create a union between them all, we would prefer a linked list
      * where everyone points to the other than working by indexes,
@@ -32,20 +32,20 @@ public class Geometries implements Intersectable {
      * Given a ray, find all the points where the ray intersects the sphere
      *
      * @param ray The ray to test for intersections.
-     * @return A list of points.
+     * @return A list of GeoPoints.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
-        List<Point> intersections = null;
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        List<GeoPoint> intersections = null;
 
         for (var geometry : this.geometries) {
-            List<Point> intersectionsPoints = geometry.findIntersections(ray);
+            List<GeoPoint> geometryIntersections = geometry.findGeoIntersections(ray);
 
-            if (intersectionsPoints != null) {
+            if (geometryIntersections != null) {
                 if (intersections == null)
                     intersections = new LinkedList<>();
 
-                intersections.addAll(intersectionsPoints);
+                intersections.addAll(geometryIntersections);
             }
         }
 

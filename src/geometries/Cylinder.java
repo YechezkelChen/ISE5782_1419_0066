@@ -75,15 +75,14 @@ public class Cylinder extends Tube {
         return P.subtract(O).normalize();
     }
 
-
     /**
      * Given a ray, find all the points where the ray intersects the sphere
      *
      * @param ray The ray to test for intersections.
-     * @return A list of points.
+     * @return A list of GeoPoints.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         return null;
     }
 }

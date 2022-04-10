@@ -30,10 +30,10 @@ public class Triangle extends Polygon {
      * @return A list of points.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
-        List<Point> result = this.plane.findIntersections(ray);
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        List<GeoPoint> intersections = this.plane.findGeoIntersections(ray);
 
-        if (result == null)
+        if (intersections == null)
             return null;
 
         Point p0 = ray.getP0();
@@ -52,8 +52,10 @@ public class Triangle extends Polygon {
         double product3 = v.dotProduct(n3);
 
         //If all the products are the same sign, a point of intersection within the triangle
-        if ((product1 > 0 && product2 > 0 && product3 > 0) || (product1 < 0 && product2 < 0 && product3 < 0))
-            return List.of(result.get(0));
+        if ((product1 > 0 && product2 > 0 && product3 > 0) || (product1 < 0 && product2 < 0 && product3 < 0)) {
+            intersections.get(0).geometry = this;
+            return intersections;
+        }
 
         //1. If one product is zero the point on a rib or on the continuation of the rib
         //2. If 2 multiples are reset the point on one of the vertices of the triangle

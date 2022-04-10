@@ -1,5 +1,6 @@
 package geometries;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import primitives.*;
@@ -9,7 +10,7 @@ import static primitives.Util.*;
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate system
  *
  */
-public class Polygon implements Geometry {
+public class Polygon extends Geometry {
 	/**
 	 * List of polygon's vertices
 	 */
@@ -97,12 +98,13 @@ public class Polygon implements Geometry {
 	 * Given a ray, find all the points where the ray intersects the sphere
 	 *
 	 * @param ray The ray to test for intersections.
-	 * @return A list of points.
+	 * @return A list of GeoPoints.
 	 */
 	@Override
-	public List<Point> findIntersections(Ray ray) {
-		List<Point> intersectionsPoints = plane.findIntersections(ray);
-		if (intersectionsPoints == null)
+	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+		List<GeoPoint> intersections = this.plane.findGeoIntersections(ray);
+
+		if (intersections == null)
 			return null; // no Intersections at all in the plane
 
 		int numOfVertices = vertices.size();
@@ -134,6 +136,7 @@ public class Polygon implements Geometry {
 				return null;
 		}
 
-		return intersectionsPoints;//dont know wate to return
+		intersections.get(0).geometry = this;
+		return intersections;
 	}
 }
