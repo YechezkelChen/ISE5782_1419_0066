@@ -1,21 +1,22 @@
 package lighting;
 import primitives.*;
 
-public class AmbientLight {
+/**
+ * AmbientLight is a subclass of Light that takes in a color and a double3 and then scales the color by the double3
+ */
+public class AmbientLight extends Light {
+
     /**
-     * Creating a private final field called `intensity` that is of type `Color`.
+     * A default constructor that takes Black color and insert to intensity.
      */
-    private final Color intensity;
-
     public AmbientLight() {
-        this.intensity = Color.BLACK;
+        super(Color.BLACK);
     }
 
+    /**
+     * A constructor that takes in a color and a double3 and then scales the color by the double3.
+     */
     public AmbientLight(Color iA, Double3 kA) {
-        this.intensity = iA.scale(kA);
-    }
-
-    public Color getIntensity() {
-        return intensity;
+        super(iA.scale(kA));
     }
 }

@@ -105,11 +105,23 @@ public class Camera {
         return this;
     }
 
+    /**
+     * This function sets the image writer of the camera and returns the camera.
+     *
+     * @param imageWriter The ImageWriter object that will be used to write the image to a file.
+     * @return The camera itself.
+     */
     public Camera setImageWriter(ImageWriter imageWriter) {
         this.imageWriter = imageWriter;
         return this;
     }
 
+    /**
+     * This function sets the ray tracer for this camera.
+     *
+     * @param rayTracer The ray tracer to use.
+     * @return The camera object itself.
+     */
     public Camera setRayTracer(RayTracerBase rayTracer) {
         this.rayTracer = rayTracer;
         return this;
@@ -175,10 +187,14 @@ public class Camera {
         return this.rayTracer.traceRay(ray);
     }
 
+
     /**
-     * It checks that the image writer and ray tracer are available.
+     * For every pixel in the image, we cast a ray from the camera through the pixel, and then we color the pixel according
+     * to the color of the closest intersection
+     *
+     * @return The camera itself.
      */
-    public void renderImage() {
+    public Camera renderImage() {
         try {
             this.checkImgWriter();
             this.checkRayTracer();
@@ -191,16 +207,26 @@ public class Camera {
                 Color pixelColor = this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), j, i);
                 this.imageWriter.writePixel(j, i, pixelColor);
             }
+
+        return this;
     }
 
     /**
-     * This function takes in an interval and a color and prints out a grid of the given color
+     * "Paint only the grid lines, leaving the background as it was."
      *
-     * @param interval the interval at which the grid will be drawn
-     * @param color    the color of the grid lines
+     * The function is called with two parameters:
+     *
+     * * interval - the interval between the grid lines
+     * * color - the color of the grid lines
+     *
+     * The function is called on a Camera object, and returns the same Camera object
+     *
+     * @param interval the interval between the grid lines
+     * @param color The color of the grid lines
+     * @return The camera itself.
      */
-    public void printGrid(int interval, Color color) {
-        this.checkImgWriter();//ask yair!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    public Camera printGrid(int interval, Color color) {
+        this.checkImgWriter();
         for (int i = 0; i < this.imageWriter.getNy(); i++)
             for (int j = 0; j < this.imageWriter.getNx(); j++) {
                 //Paint only the grid lines
@@ -208,14 +234,19 @@ public class Camera {
                 if (i % interval == 0 || j % interval == 0)
                     this.imageWriter.writePixel(j, i, color);
             }
+
+        return this;
     }
 
     /**
-     * It checks if the image writer is ready to write to the image.
-     * If it is, it calls the writeToImage function of the image writer
+     * This function checks if the image writer is null, and if it is, it creates a new image writer. Then, it writes the
+     * image to the image writer.
+     *
+     * @return The camera itself.
      */
-    public void writeToImage() {
-        this.checkImgWriter();//ask yair!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    public Camera writeToImage() {
+        this.checkImgWriter();
         this.imageWriter.writeToImage();
+        return this;
     }
 }

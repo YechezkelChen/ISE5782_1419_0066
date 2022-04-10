@@ -1,12 +1,9 @@
 package renderer;
 
-import primitives.Color;
-import primitives.Point;
-import primitives.Ray;
+import primitives.*;
 import scene.Scene;
 import geometries.Intersectable.GeoPoint;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class RayTracerBasic extends RayTracerBase {
