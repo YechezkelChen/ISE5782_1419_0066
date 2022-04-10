@@ -33,9 +33,9 @@ public abstract class Geometry extends Intersectable{
      * @param emission color to the geometry
      * @return the emission color that created.
      */
-    public Color setEmission(Color emission) {
+    public Geometry setEmission(Color emission) {
         this.emission = emission;
-        return this.emission;
+        return this;
     }
 
 

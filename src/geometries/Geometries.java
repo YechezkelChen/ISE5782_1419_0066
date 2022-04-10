@@ -28,6 +28,27 @@ public class Geometries extends Intersectable {
         this.geometries.addAll(List.of(geometries));
     }
 
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        List<Point> result = null;
+
+        for (var geometry : this.geometries) {
+            List<Point> points = geometry.findIntersections(ray);
+
+            if (points != null) {
+
+                if (result == null) {
+                    result = new LinkedList<>();
+                }
+
+                result.addAll(points);
+            }
+        }
+
+        return result;
+
+    }
+
     /**
      * Given a ray, find all the points where the ray intersects the sphere
      *
