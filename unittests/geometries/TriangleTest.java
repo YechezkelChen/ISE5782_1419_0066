@@ -32,12 +32,12 @@ public class TriangleTest {
      */
     void testFindIntersections() {
         Triangle triangle = new Triangle(new Point(1.0, 0.0, 0.0), new Point(0.0, 1.0, 0.0), new Point(0.0, 0.0, 1.0));
-        List<Intersectable.GeoPoint> intersectionsPoints = new LinkedList<Intersectable.GeoPoint>();
+        List<Point> intersectionsPoints = new LinkedList<Point>();
 
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: Test when the ray intersects inside the triangle(1 points)
-        intersectionsPoints = triangle.findGeoIntersections((new Ray(new Point(0.0, 0.0, 0.0), new Vector(1.0, 1.0, 2.0))));
+        intersectionsPoints = triangle.findIntersections((new Ray(new Point(0.0, 0.0, 0.0), new Vector(1.0, 1.0, 2.0))));
         assertEquals(intersectionsPoints.size(), 1, "The number of intersections points is wrong");
         assertEquals(intersectionsPoints.get(0), new Point(0.25, 0.25, 0.5), "The intersection point is wrong");
 
