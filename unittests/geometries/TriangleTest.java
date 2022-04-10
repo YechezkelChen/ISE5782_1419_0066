@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for Triangle class
- *
  */
 public class TriangleTest {
 
@@ -33,31 +32,31 @@ public class TriangleTest {
      */
     void testFindIntersections() {
         Triangle triangle = new Triangle(new Point(1.0, 0.0, 0.0), new Point(0.0, 1.0, 0.0), new Point(0.0, 0.0, 1.0));
-        List<Point> intersectionsPoints = new LinkedList<Point>();
+        List<Intersectable.GeoPoint> intersectionsPoints = new LinkedList<Intersectable.GeoPoint>();
 
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: Test when the ray intersects inside the triangle(1 points)
-        intersectionsPoints = triangle.findIntersections(new Ray(new Point(0.0,0.0,0.0),new Vector(1.0,1.0,2.0)));
+        intersectionsPoints = triangle.findGeoIntersections((new Ray(new Point(0.0, 0.0, 0.0), new Vector(1.0, 1.0, 2.0))));
         assertEquals(intersectionsPoints.size(), 1, "The number of intersections points is wrong");
-        assertEquals(intersectionsPoints.get(0), new Point(0.25,0.25,0.5), "The intersection point is wrong");
+        assertEquals(intersectionsPoints.get(0), new Point(0.25, 0.25, 0.5), "The intersection point is wrong");
 
         // TC02: Test when the ray outside against edge(0 points)
-        assertNull(triangle.findIntersections(new Ray(new Point(-1.0,-2.0,-2.0), new Vector(1.0,1.0,2.0))),"There should be no point of intersection because the ray outside against edge");
+        assertNull(triangle.findIntersections(new Ray(new Point(-1.0, -2.0, -2.0), new Vector(1.0, 1.0, 2.0))), "There should be no point of intersection because the ray outside against edge");
 
         // TC03: Test when the ray outside against vertex(0 points)
-        assertNull(triangle.findIntersections(new Ray(new Point(-1.0,-1.0,-1.0), new Vector(0.5,0.5,1.5))),"There should be no point of intersection because the ray outside against vertex");
+        assertNull(triangle.findIntersections(new Ray(new Point(-1.0, -1.0, -1.0), new Vector(0.5, 0.5, 1.5))), "There should be no point of intersection because the ray outside against vertex");
 
 
         // =============== Boundary Values Tests ==================
 
         // TC11: Test when the ray intersects the triangle on edge(0 points)
-        assertNull(triangle.findIntersections(new Ray(new Point(0.5,0.0,0.0),new Vector(0.0,0.0,0.5))),"There should be no point of intersection because the ray intersects the triangle on edge");
+        assertNull(triangle.findIntersections(new Ray(new Point(0.5, 0.0, 0.0), new Vector(0.0, 0.0, 0.5))), "There should be no point of intersection because the ray intersects the triangle on edge");
 
         // TC12: Test when the ray intersects the triangle in vertex(0 points)
-        assertNull(triangle.findIntersections(new Ray(new Point(0.0,-1.0,0.0), new Vector(0.0,1.0,1.0))),"There should be no point of intersection because the ray intersects the triangle in vertex");
+        assertNull(triangle.findIntersections(new Ray(new Point(0.0, -1.0, 0.0), new Vector(0.0, 1.0, 1.0))), "There should be no point of intersection because the ray intersects the triangle in vertex");
 
         // TC13: Test when the ray intersects the triangle on edge's continuation(0 points)
-        assertNull(triangle.findIntersections(new Ray(new Point(3.0,0.0,0.0), new Vector(-3.0,0.0,1.5))),"There should be no point of intersection because the ray intersects the triangle on edge's continuation");
+        assertNull(triangle.findIntersections(new Ray(new Point(3.0, 0.0, 0.0), new Vector(-3.0, 0.0, 1.5))), "There should be no point of intersection because the ray intersects the triangle on edge's continuation");
     }
 }

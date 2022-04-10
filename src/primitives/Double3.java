@@ -1,6 +1,3 @@
-/**
- * 
- */
 package primitives;
 
 import static primitives.Util.*;
@@ -18,7 +15,7 @@ public class Double3 {
 	/**
 	 * Zero triad (0,0,0)
 	 */
-	public static final Double3 ZERO = new Double3(0, 0, 0);
+	static final Double3 ZERO = new Double3(0, 0, 0);
 
 	/**
 	 * Constructor to initialize Double3 based object with its three number values
@@ -31,17 +28,6 @@ public class Double3 {
 		this.d1 = d1;
 		this.d2 = d2;
 		this.d3 = d3;
-	}
-
-	/**
-	 * Constructor to initialize Double3 based object the same number values
-	 * 
-	 * @param value number value for all 3 numbers
-	 */
-	public Double3(double value) {
-		this.d1 = value;
-		this.d2 = value;
-		this.d3 = value;
 	}
 
 	@Override
@@ -73,7 +59,7 @@ public class Double3 {
 	 * @param rhs right handle side operand for addition
 	 * @return result of add
 	 */
-	public Double3 add(Double3 rhs) {
+	Double3 add(Double3 rhs) {
 		return new Double3(d1 + rhs.d1, d2 + rhs.d2, d3 + rhs.d3);
 	}
 
@@ -84,7 +70,7 @@ public class Double3 {
 	 * @param rhs right handle side operand for addition
 	 * @return result of add
 	 */
-	public Double3 subtract(Double3 rhs) {
+	Double3 subtract(Double3 rhs) {
 		return new Double3(d1 - rhs.d1, d2 - rhs.d2, d3 - rhs.d3);
 	}
 
@@ -95,7 +81,7 @@ public class Double3 {
 	 * @param rhs right handle side operand for scaling
 	 * @return result of scale
 	 */
-	public Double3 scale(double rhs) {
+	Double3 scale(double rhs) {
 		return new Double3(d1 * rhs, d2 * rhs, d3 * rhs);
 	}
 
@@ -106,7 +92,7 @@ public class Double3 {
 	 * @param rhs right handle side operand for reducing
 	 * @return result of scale
 	 */
-	public Double3 reduce(double rhs) {
+	Double3 reduce(double rhs) {
 		return new Double3(d1 / rhs, d2 / rhs, d3 / rhs);
 	}
 
@@ -117,8 +103,7 @@ public class Double3 {
 	 * @param rhs right handle side operand for product
 	 * @return result of product
 	 */
-	public Double3 product(Double3 rhs) {
+	Double3 product(Double3 rhs) {
 		return new Double3(d1 * rhs.d1, d2 * rhs.d2, d3 * rhs.d3);
 	}
-
 }
