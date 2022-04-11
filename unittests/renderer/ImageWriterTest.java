@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
+import renderer.ImageWriter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
