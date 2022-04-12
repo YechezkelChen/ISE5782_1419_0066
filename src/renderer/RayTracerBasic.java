@@ -17,6 +17,8 @@ public class RayTracerBasic extends RayTracerBase {
         super(scene);
     }
 
+    private static final double DELTA = 0.1;
+
 
     /**
      * Given a ray, find the closest point of intersection with the scene, and return the color of that point
@@ -49,13 +51,13 @@ public class RayTracerBasic extends RayTracerBase {
     /**
      * It calculates the color of a point on a geometry, by calculating the color of the light sources that affect it
      *
-     * @param gp The point on the geometry that the ray intersected with.
+     * @param gp  The point on the geometry that the ray intersected with.
      * @param ray the ray that hit the geometry
      * @return The color of the point.
      */
     private Color calcLocalEffects(GeoPoint gp, Ray ray) {
         Color color = Color.BLACK;
-        Vector v = ray.getDir ();
+        Vector v = ray.getDir();
         Vector n = gp.geometry.getNormal(gp.point);
         double nv = alignZero(n.dotProduct(v));
         if (nv == 0)
@@ -79,11 +81,11 @@ public class RayTracerBasic extends RayTracerBase {
      * the material.
      *
      * @param material The material of the object that the ray hit.
-     * @param nl the dot product of the normal and the light vector
+     * @param nl       the dot product of the normal and the light vector
      * @return The diffuse color of the material.
      */
     private Double3 calcDiffusive(Material material, double nl) {
-        if(nl < 0) nl *= -1;
+        if (nl < 0) nl *= -1;
         return material.Kd.scale(nl);
     }
 
@@ -91,18 +93,38 @@ public class RayTracerBasic extends RayTracerBase {
      * > Calculate the specular component of the light reflected from a point on a surface
      *
      * @param material The material of the object that is being shaded.
-     * @param n normal vector
-     * @param l the direction of the light source
-     * @param nl the dot product of the normal and the light vector
-     * @param v the vector from the intersection point to the camera
+     * @param n        normal vector
+     * @param l        the direction of the light source
+     * @param nl       the dot product of the normal and the light vector
+     * @param v        the vector from the intersection point to the camera
      * @return The specular component of the light.
      */
     private Double3 calcSpecular(Material material, Vector n, Vector l, double nl, Vector v) {
         Vector r = l.subtract(n.scale(nl).scale(2));
         double minus_vr = Math.pow(v.scale(-1).dotProduct(r), material.Shininess);
-        if(minus_vr <= 0)
+        if (minus_vr <= 0)
             return Double3.ZERO;
 
         return material.Ks.scale(minus_vr);
+    }
+
+    private boolean unshaded(GeoPoint gp, LightSource lightSource, Vector l, Vector n) {
+        Vector lightDirection = l.scale(-1); // from point to light source
+        Ray lightRay = new Ray(gp.point, lightDirection);
+        List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay);
+
+        if (intersections == null)
+            return true;
+
+        double ktr = 1.0;
+        double lightDistance = lightSource.getDistance(gp.point);
+
+        for (GeoPoint geoPoint : intersections) {
+
+            if (alignZero(geoPoint.point.distance(gp.point) - lightDistance) <= 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
