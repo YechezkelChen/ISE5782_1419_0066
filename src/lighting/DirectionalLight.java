@@ -47,6 +47,12 @@ public class DirectionalLight extends Light implements LightSource {
         return this.direction;
     }
 
+    /**
+     * Returns the distance from the origin to the given point.
+     *
+     * @param point The point to which the distance is to be calculated.
+     * @return The distance between the point and the origin.
+     */
     @Override
     public double getDistance(Point point) {
         return Double.POSITIVE_INFINITY;

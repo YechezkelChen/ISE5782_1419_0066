@@ -10,15 +10,18 @@ import java.util.List;
 import static primitives.Util.alignZero;
 
 public class RayTracerBasic extends RayTracerBase {
+
+    /**
+     * constant number for size moving first rays for shading rays
+     */
+    private static final double DELTA = 0.1;
+
     /**
      * This is the constructor for the RayTracerBasic class. It calls the constructor for the RayTracerBase class.
      */
     public RayTracerBasic(Scene scene) {
         super(scene);
     }
-
-    private static final double DELTA = 0.1;
-
 
     /**
      * Given a ray, find the closest point of intersection with the scene, and return the color of that point
@@ -68,9 +71,11 @@ public class RayTracerBasic extends RayTracerBase {
             Vector l = lightSource.getL(gp.point);
             double nl = alignZero(n.dotProduct(l));
             if (nl * nv > 0) { // sign(nl) == sing(nv)
-                Color iL = lightSource.getIntensity(gp.point);
-                color = color.add(iL.scale(calcDiffusive(material, nl)))
-                        .add(iL.scale(calcSpecular(material, n, l, nl, v)));
+                if (unshaded(lightSource, gp, l, n, nv)) {
+                    Color iL = lightSource.getIntensity(gp.point);
+                    color = color.add(iL.scale(calcDiffusive(material, nl)))
+                            .add(iL.scale(calcSpecular(material, n, l, nl, v)));
+                }
             }
         }
         return color;
@@ -108,23 +113,33 @@ public class RayTracerBasic extends RayTracerBase {
         return material.Ks.scale(minus_vr);
     }
 
-    private boolean unshaded(GeoPoint gp, LightSource lightSource, Vector l, Vector n) {
+    /**
+     * If the ray from the point to the light source intersects with any geometry, then the point is shaded
+     *
+     * @param lightSource The light source that we are checking if it is unshaded.
+     * @param gp The point on the geometry that we're currently shading.
+     * @param l The vector from the point to the light source.
+     * @param n The normal vector to the surface at the intersection point.
+     * @param nv the dot product of the normal vector and the vector from the camera to the point.
+     * @return the color of the point.
+     */
+    private boolean unshaded(LightSource lightSource, GeoPoint gp, Vector l, Vector n, double nv) {
         Vector lightDirection = l.scale(-1); // from point to light source
-        Ray lightRay = new Ray(gp.point, lightDirection);
-        List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay);
+
+        Vector epsVector = n.scale(nv < 0 ? DELTA : -DELTA);
+        Point point = gp.point.add(epsVector);
+        Ray lightRay = new Ray(point, lightDirection);
+
+        List<GeoPoint> intersections = this.scene.geometries.findGeoIntersections(lightRay);
 
         if (intersections == null)
             return true;
 
-        double ktr = 1.0;
-        double lightDistance = lightSource.getDistance(gp.point);
+        double lightDistance = lightSource.getDistance(point);
+        for (var geoPoint : intersections)
+            if (new Double3(geoPoint.point.distance(point)).lowerThan(lightDistance))
+                    return false;
 
-        for (GeoPoint geoPoint : intersections) {
-
-            if (alignZero(geoPoint.point.distance(gp.point) - lightDistance) <= 0) {
-                return false;
-            }
-        }
         return true;
     }
 }

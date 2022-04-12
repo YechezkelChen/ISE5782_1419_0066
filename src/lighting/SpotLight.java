@@ -36,8 +36,4 @@ public class SpotLight extends PointLight {
 
         return super.getIntensity(p).scale(dirL);
     }
-    @Override
-    public double getDistance(Point point) {
-        return direction.distance(point);
-    }
 }

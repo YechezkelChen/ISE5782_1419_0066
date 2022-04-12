@@ -73,7 +73,7 @@ public class PointLight extends Light implements LightSource{
      */
     @Override
     public Color getIntensity(Point p) {
-        double d = this.position.distance(p);
+        double d = this.getDistance(p);
         return super.getIntensity().reduce(this.Kc + this.Kl * d + this.Kq * d * d);
     }
 
@@ -88,8 +88,14 @@ public class PointLight extends Light implements LightSource{
         return p.subtract(this.position).normalize();
     }
 
+    /**
+     * Returns the distance from the origin to the given point.
+     *
+     * @param point The point to which the distance is to be calculated.
+     * @return The distance between the point and the origin.
+     */
     @Override
     public double getDistance(Point point) {
-        return position.distance(point);
+        return this.position.distance(point);
     }
 }
