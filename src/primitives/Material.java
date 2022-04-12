@@ -13,6 +13,16 @@ public class Material {
     public Double3 Ks = Double3.ZERO;
 
     /**
+     * A public variable of type Double3, and it is being initialized to the value of Double3.ZERO.
+     */
+    public Double3 Kr = Double3.ZERO;
+
+    /**
+     * A public variable of type Double3, and it is being initialized to the value of Double3.ZERO.
+     */
+    public Double3 Kt = Double3.ZERO;
+
+    /**
      * A public variable of type int, and it is initialized to the value of 0.
      */
     public int Shininess = 0;
@@ -61,6 +71,28 @@ public class Material {
      */
     public Material setKs(double kS) {
         this.Ks = new Double3(kS);
+        return this;
+    }
+
+    /**
+     * Set the reflection coefficient for this material.
+     *
+     * @param kr The color of the reflected light.
+     * @return The material itself.
+     */
+    public Material setKr(Double3 kr) {
+        Kr = kr;
+        return this;
+    }
+
+    /**
+     * Set the material's Kt (transmission coefficient) to the given value.
+     *
+     * @param kt The color of the material.
+     * @return The material itself.
+     */
+    public Material setKt(Double3 kt) {
+        Kt = kt;
         return this;
     }
 

@@ -17,6 +17,13 @@ public class RayTracerBasic extends RayTracerBase {
     private static final double DELTA = 0.1;
 
     /**
+     * constant number for size moving first rays for recursion stop conditions
+     */
+    private static final int MAX_CALC_COLOR_LEVEL = 10;
+    private static final double MIN_CALC_COLOR_K = 0.001;
+
+
+    /**
      * This is the constructor for the RayTracerBasic class. It calls the constructor for the RayTracerBase class.
      */
     public RayTracerBasic(Scene scene) {
@@ -45,10 +52,14 @@ public class RayTracerBasic extends RayTracerBase {
      * @param intersection The point in 3D space where the ray is originating from.
      * @return The color of the ambient light.
      */
-    private Color calcColor(GeoPoint intersection, Ray ray) {
-        return this.scene.ambientLight.getIntensity()
+    private Color calcColor(GeoPoint intersection, Ray ray, int level, double k) {
+        Color color =  this.scene.ambientLight.getIntensity()
                 .add(intersection.geometry.getEmission())
                 .add(calcLocalEffects(intersection, ray));
+        if(level != 1)
+            color = color.add(calcGlobalEffects(intersection, ray, level, k));
+
+        return color;
     }
 
     /**
@@ -141,5 +152,32 @@ public class RayTracerBasic extends RayTracerBase {
                     return false;
 
         return true;
+    }
+
+    private Color calcGlobalEffects(GeoPoint geopoint, Ray ray, int level, double k) {
+        Color color = Color.BLACK;
+        Material material = geopoint.geometry.getMaterial();
+
+        Vector v = ray.getDir();
+        Vector n = geopoint.geometry.getNormal(geopoint.point);
+        if (v.dotProduct(n) > 0)
+            n = n.scale(-1);
+
+        // the reflection effect
+        Ray reflectedRay = constructReflectedRay(n, geopoint.point, ray);
+        GeoPoint reflectedPoint = findClosestIntersection(reflectedRay);
+        Double3 kkr = material.Kr.scale(k);
+        if (!(kkr.lowerThan(MIN_CALC_COLOR_K) && kkr.equals(new Double3(MIN_CALC_COLOR_K))))
+            color = color.add(calcColor(reflectedPoint, reflectedRay, (level-1), kkr).scale(material.Kr));
+
+
+        // the refraction effect
+        Ray refractedRay = constructRefractedRay(geopoint.point, ray);
+        GeoPoint refractedPoint = findClosestIntersection(refractedRay);
+        Double3 kkt = material.Kt.scale(k);
+        if (!(kkt.lowerThan(MIN_CALC_COLOR_K) && kkt.equals(new Double3(MIN_CALC_COLOR_K))))
+            color = color.add(calcColor(reflectedPoint, reflectedRay, (level-1), kkt).scale(material.Kr));
+
+        return color;
     }
 }
