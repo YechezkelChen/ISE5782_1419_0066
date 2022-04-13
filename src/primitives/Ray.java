@@ -1,7 +1,9 @@
 package primitives;
 
 import java.util.*;
+
 import geometries.Intersectable.GeoPoint;
+
 import static primitives.Util.*;
 
 /**
@@ -9,8 +11,21 @@ import static primitives.Util.*;
  * A ray is defined by a point and a vector
  */
 public class Ray {
+
+    /**
+     * A private variable that is final.
+      */
     private final Point p0;
+
+    /**
+     * A vector that is the direction of the ray.
+     */
     private final Vector dir;
+
+    /**
+     * constant number for size moving first rays for shading rays
+     */
+    private static final double DELTA = 0.1;
 
     /**
      * Constructor to initialize Ray based point and vector
@@ -21,6 +36,21 @@ public class Ray {
     public Ray(Point p0, Vector dir) {
         this.p0 = new Point(p0.xyz.d1, p0.xyz.d2, p0.xyz.d3);
         this.dir = dir.normalize();
+    }
+
+    public Ray(Point p0, Vector dir, Vector normal) {
+        this.dir = dir;
+        //check that the normal and the direction are not orthogonal
+        double nv = alignZero(normal.dotProduct(dir));
+
+        // if the normal and the direction are not orthogonal
+        if (isZero(nv))
+            this.p0 = p0;
+        else {
+            Vector moveVector = normal.scale(nv > 0 ? DELTA : -DELTA);
+            // move the head of the vector in the right direction
+            this.p0 = p0.add(moveVector);
+        }
     }
 
     public Point getP0() {
@@ -68,7 +98,7 @@ public class Ray {
      * @return The closest GeoPoint to the head point of ray.
      */
     public GeoPoint findClosestGeoPoint(List<GeoPoint> intersections) {
-        if(intersections == null || intersections.size() == 0)
+        if (intersections == null || intersections.size() == 0)
             return null;
 
         // 2 variables help
