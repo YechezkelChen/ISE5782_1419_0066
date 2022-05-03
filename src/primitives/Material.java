@@ -5,36 +5,36 @@ public class Material {
     /**
      * A public variable of type Double3, and it is initialized to the value of Double3.ZERO.
      */
-    public Double3 Kd = Double3.ZERO;
+    public Double3 kD = Double3.ZERO;
 
     /**
      * A public variable of type Double3, and it is being initialized to the value of Double3.ZERO.
      */
-    public Double3 Ks = Double3.ZERO;
+    public Double3 kS = Double3.ZERO;
 
     /**
      * A public variable of type Double3, and it is being initialized to the value of Double3.ZERO.
      */
-    public Double3 Kr = Double3.ZERO;
+    public Double3 kR = Double3.ZERO;
 
     /**
      * A public variable of type Double3, and it is being initialized to the value of Double3.ZERO.
      */
-    public Double3 Kt = Double3.ZERO;
+    public Double3 kT = Double3.ZERO;
 
     /**
      * A public variable of type int, and it is initialized to the value of 0.
      */
-    public int Shininess = 0;
+    public int nShininess = 0;
 
     /**
      * Set the diffuse color of the material to the given color and return the material.
      *
-     * @param kd The diffuse color of the material.
+     * @param kD The diffuse color of the material.
      * @return The material itself.
      */
-    public Material setKd(Double3 kd) {
-        this.Kd = kd;
+    public Material setkD(Double3 kD) {
+        this.kD = kD;
         return this;
     }
 
@@ -45,7 +45,7 @@ public class Material {
      * @return The material itself.
      */
     public Material setKd(double kD) {
-        this.Kd = new Double3(kD);
+        this.kD = new Double3(kD);
         return this;
     }
 
@@ -55,11 +55,11 @@ public class Material {
      * The first line of the function is a JavaDoc comment. This is a special comment that is used to document the
      * function. The comment is written in HTML, and the JavaDoc tool will generate a web page from it
      *
-     * @param ks The specular color of the material.
+     * @param kS The specular color of the material.
      * @return The material itself.
      */
-    public Material setKs(Double3 ks) {
-        this.Ks = ks;
+    public Material setkS(Double3 kS) {
+        this.kS = kS;
         return this;
     }
 
@@ -70,40 +70,40 @@ public class Material {
      * @return The material itself.
      */
     public Material setKs(double kS) {
-        this.Ks = new Double3(kS);
+        this.kS = new Double3(kS);
         return this;
     }
 
     /**
      * Set the reflection coefficient for this material.
      *
-     * @param kr The color of the reflected light.
+     * @param kR The color of the reflected light.
      * @return The material itself.
      */
-    public Material setKr(Double3 kr) {
-        Kr = kr;
+    public Material setKr(Double3 kR) {
+        this.kR = kR;
         return this;
     }
 
     /**
      * Set the material's Kt (transmission coefficient) to the given value.
      *
-     * @param kt The color of the material.
+     * @param kT The color of the material.
      * @return The material itself.
      */
-    public Material setKt(Double3 kt) {
-        Kt = kt;
+    public Material setKt(Double3 kT) {
+        this.kT = kT;
         return this;
     }
 
     /**
      * Sets the shininess of the material and returns the material.
      *
-     * @param shininess The shininess of the material.
+     * @param nShininess The shininess of the material.
      * @return The material object itself.
      */
-    public Material setShininess(int shininess) {
-        this.Shininess = shininess;
+    public Material setnShininess(int nShininess) {
+        this.nShininess = nShininess;
         return this;
     }
 }

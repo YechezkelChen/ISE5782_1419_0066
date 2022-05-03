@@ -13,27 +13,46 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class IntegrationTests {
     static final Point ZERO_POINT = new Point(0.0, 0.0, 0.0);
+    Camera camera = new Camera(new Point(0.0, 0.0, 0.5),
+            new Vector(0.0, 0.0, -1.0),
+            new Vector(0.0, 1.0, 0.0))
+            .setVPDistance(1)
+            .setVPSize(3, 3);
+
+    LinkedList<Ray> rayList = findRaysThroughVpPixels(camera, 3, 3);
+    Sphere sphere;
+    Plane plane;
+    Triangle triangle;
+
+    String sphereErrorMessage = "ERROR: Wrong number of intersections of camera rays with sphere";
+    String planeErrorMessage = "ERROR: Wrong number of intersections of camera rays with plane";
+    String triangleErrorMessage = "ERROR: Wrong number of intersections of camera rays with triangle";
 
     /**
      * Integration test for {@link geometries.Sphere}
      */
     @Test
     void testCameraSphereIntersections() {
-        List<Intersectable> spheres = new LinkedList<Intersectable>(Arrays.asList(
-                //TC01: the sphere is in front of the view plane(2).
-                new Sphere(new Point(0.0, 0.0, -3.0), 1),
-                //TC02: the view plane is inside the sphere, all rays should intersect twice(18).
-                new Sphere(new Point(0.0, 0.0, -2.5), 2.5),
-                //TC03: the view plane cross the sphere (10).
-                new Sphere(new Point(0.0, 0.0, -2.0), 2),
-                //TC04: the camera is inside the sphere,all rays should intersect only once(9).
-                new Sphere(new Point(0.0, 0.0, -1.0), 4),
-                //TC05: the sphere is behind the camera , no ray should intersect(0).
-                new Sphere(new Point(0.0, 0.0, 1.0), 0.5)
-        ));
+        // **** Group: Sphere&Camera integration test cases ****//
+        //TC01: the sphere is in front of the view plane(2).
+        sphere = new Sphere(new Point(0.0, 0.0, -3.0), 1);
+        assertEquals(2, countIntersections(rayList, sphere), sphereErrorMessage);
 
-        int[] numOfIntersectionsExpected = new int[]{2, 18, 10, 9, 0};
-        testIntersectsAndCamera(spheres, numOfIntersectionsExpected);
+        //TC02: the view plane is inside the sphere, all rays should intersect twice(18).
+        sphere = new Sphere(new Point(0.0, 0.0, -2.5), 2.5);
+        assertEquals(18, countIntersections(rayList, sphere), sphereErrorMessage);
+
+        //TC03: the view plane cross the sphere (10).
+        sphere = new Sphere(new Point(0.0, 0.0, -2.0), 2);
+        assertEquals(10, countIntersections(rayList, sphere), sphereErrorMessage);
+
+        //TC04: the camera is inside the sphere,all rays should intersect only once(9).
+        sphere = new Sphere(new Point(0.0, 0.0, -1.0), 4);
+        assertEquals(9, countIntersections(rayList, sphere), sphereErrorMessage);
+
+        //TC05: the sphere is behind the camera , no ray should intersect(0).
+        sphere = new Sphere(new Point(0.0, 0.0, 1.0), 0.5);
+        assertEquals(0, countIntersections(rayList, sphere), sphereErrorMessage);
     }
 
     /**
@@ -41,17 +60,18 @@ public class IntegrationTests {
      */
     @Test
     void testCameraPlaneIntersections() {
-        List<Intersectable> planes = new LinkedList<Intersectable>(Arrays.asList(
-                //TC01: the plane is parallel with the view plane, all rays should intersect(9).
-                new Plane(new Point(0.0, 0.0, -2.0), new Vector(0.0, 0.0, 1.0)),
-                //TC02: the plane is in front of the view plane and cross, all rays should intersect(9).
-                new Plane(new Point(0.0, 0.0, -1.5), new Vector(0.0, -0.5, 1.0)),
-                //TC03: the plane is above the view plane's third row (6).
-                new Plane(new Point(0.0, 0.0, -3.0), new Vector(0.0, -1.0, 1.0))
-        ));
+        // **** Group: Plane&Camera integration test cases ****//
+        //TC01: the plane is parallel with the view plane, all rays should intersect(9).
+        plane = new Plane(new Point(0.0, 0.0, -2.0), new Vector(0.0, 0.0, 1.0));
+        assertEquals(9, countIntersections(rayList, plane), planeErrorMessage);
 
-        int[] numOfIntersectionsExpected = new int[]{9, 9, 6};
-        testIntersectsAndCamera(planes, numOfIntersectionsExpected);
+        //TC02: the plane is in front of the view plane and cross, all rays should intersect(9).
+        plane = new Plane(new Point(0.0, 0.0, -1.5), new Vector(0.0, -0.5, 1.0));
+        assertEquals(9, countIntersections(rayList, plane), planeErrorMessage);
+
+        //TC03: the plane is above the view plane's third row (6).
+        plane = new Plane(new Point(0.0, 0.0, -3.0), new Vector(0.0, -1.0, 1.0));
+        assertEquals(6, countIntersections(rayList, plane), planeErrorMessage);
     }
 
     /**
@@ -59,56 +79,47 @@ public class IntegrationTests {
      */
     @Test
     void testCameraTriangleIntersections() {
-        List<Intersectable> triangles = new LinkedList<Intersectable>(Arrays.asList(
-                //TC01:only the center ray should intersect(1).
-                new Triangle(new Point(0.0, 1.0, -2.0), new Point(1.0, -1.0, -2.0), new Point(-1.0, -1.0, -2.0)),
-                //TC02: only the center ray and the top-middle ray should intersect(2).
-                new Triangle(new Point(0.0, 20.0, -2.0), new Point(1.0, -1.0, -2.0), new Point(-1.0, -1.0, -2.0))
-        ));
+        //TC01:only the center ray should intersect(1).
+        triangle = new Triangle(new Point(0.0, 1.0, -2.0), new Point(1.0, -1.0, -2.0), new Point(-1.0, -1.0, -2.0));
+        assertEquals(1, countIntersections(rayList, triangle), triangleErrorMessage);
 
-        int[] numOfIntersectionsExpected = new int[]{1, 2};
-        testIntersectsAndCamera(triangles, numOfIntersectionsExpected);
+        //TC02: only the center ray and the top-middle ray should intersect(2).
+        triangle = new Triangle(new Point(0.0, 20.0, -2.0), new Point(1.0, -1.0, -2.0), new Point(-1.0, -1.0, -2.0));
+        assertEquals(2, countIntersections(rayList, triangle), triangleErrorMessage);
     }
 
     /**
-     * Given a list of intersectables, a camera, and a list of expected number of intersections,
-     * this function checks the number of intersections for each intersectable and asserts the number of intersections
+     * Finds and sums up the number of camera rays that intersect with a given shape
      *
-     * @param intersectables        an array of intersectables
-     * @param expectedIntersections an array of integers, where each integer is the number of intersections expected for
-     *                              the corresponding intersectable.
+     * @param rayList
+     * @param shape
+     * @return Number of intersections of the camera rays with a given shape
      */
-    private void testIntersectsAndCamera(List<Intersectable> intersectables, int[] expectedIntersections) {
-        int nX = 3, nY = 3;
-        Camera camera = new Camera(new Point(0.0, 0.0, 0.5), new Vector(0.0, 0.0, -1.0), new Vector(0.0, 1.0, 0.0)).setVPDistance(1).setVPSize(3, 3);
-
-        List<List<Point>> intersections = new ArrayList<>(Collections.nCopies(intersectables.size(), null));
-
-        for (int i = 0; i < nY; ++i) {
-            for (int j = 0; j < nX; ++j) {
-
-                Ray pixelRay = camera.constructRay(nX, nY, j, i);
-                for (int id = 0; id < intersectables.size(); id++) {
-                    List<Point> list = intersectables.get(id).findIntersections(pixelRay);
-                    if (list == null)
-                        continue;
-
-                    if (intersections.get(id) == null)
-                        intersections.set(id, new ArrayList<>());
-
-                    intersections.get(id).addAll(list);
-                }
-            }
+    private int countIntersections(LinkedList<Ray> rayList, Intersectable shape) {
+        int counter = 0;
+        for (Ray ray : rayList) {
+            List<Point> result = shape.findIntersections(ray);
+            if (result != null)
+                counter += result.size();
         }
+        return counter;
+    }
 
-        // checking each intersectable to assert the number of intersections.
-        for (int id = 0; id < intersectables.size(); id++) {
-            int sumOfIntersection = 0;
+    /**
+     * Calculates with loop all the rays from camera through middle of each pixel
+     *
+     * @param camera
+     * @param nX     number of pixels in x
+     * @param nY     number of pixels in y
+     * @return List of rays from camera through pixels
+     */
+    public LinkedList<Ray> findRaysThroughVpPixels(Camera camera, int nX, int nY) {
+        LinkedList<Ray> raysList = new LinkedList<>();
+        // For each pixel calls constructRay()
+        for (int j = 0; j < nY; j++)
+            for (int i = 0; i < nX; i++)
+                raysList.add(camera.constructRay(nX, nY, j, i));
 
-            if (intersections.get(id) != null)
-                sumOfIntersection = intersections.get(id).size();
-
-            assertEquals(sumOfIntersection, expectedIntersections[id], "Wrong number of intersectables");
-        }
+        return raysList;
     }
 }

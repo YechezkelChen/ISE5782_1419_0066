@@ -17,9 +17,9 @@ public class PointLight extends Light implements LightSource{
     /**
      * Discount coefficients
      */
-    private double Kc = 1;
-    private double Kl = 0;
-    private double Kq = 0;
+    private double kC = 1;
+    private double kL = 0;
+    private double kQ = 0;
 
     /**
      * A constructor for the class Light.
@@ -35,33 +35,33 @@ public class PointLight extends Light implements LightSource{
     /**
      * Sets the constant attenuation factor of the light.
      *
-     * @param kc Constant attenuation factor
+     * @param kC Constant attenuation factor
      * @return The object itself.
      */
-    public PointLight setKc(double kc) {
-        this.Kc = kc;
+    public PointLight setKc(double kC) {
+        this.kC = kC;
         return this;
     }
 
     /**
      * Sets the constant attenuation factor of the light source.
      *
-     * @param kl The constant attenuation factor.
+     * @param kL The constant attenuation factor.
      * @return The object itself.
      */
-    public PointLight setKl(double kl) {
-        this.Kl = kl;
+    public PointLight setKl(double kL) {
+        this.kL = kL;
         return this;
     }
 
     /**
      * Sets the constant attenuation factor of the light source.
      *
-     * @param kq Constant attenuation factor
+     * @param kQ Constant attenuation factor
      * @return The object itself.
      */
-    public PointLight setKq(double kq) {
-        this.Kq = kq;
+    public PointLight setKq(double kQ) {
+        this.kQ = kQ;
         return this;
     }
 
@@ -74,7 +74,7 @@ public class PointLight extends Light implements LightSource{
     @Override
     public Color getIntensity(Point p) {
         double d = this.getDistance(p);
-        return super.getIntensity().reduce(this.Kc + this.Kl * d + this.Kq * d * d);
+        return super.getIntensity().reduce(this.kC + this.kL * d + this.kQ * d * d);
     }
 
     /**

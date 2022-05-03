@@ -51,7 +51,7 @@ public class Ray {
             // move the head of the vector in the right direction
             this.p0 = p0.add(moveVector);
         }
-    }
+     }
 
     public Point getP0() {
         return p0;
