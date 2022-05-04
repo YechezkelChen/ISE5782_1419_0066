@@ -98,10 +98,9 @@ public class Ray {
      * @return The closest GeoPoint to the head point of ray.
      */
     public GeoPoint findClosestGeoPoint(List<GeoPoint> intersections) {
-        if (intersections == null || intersections.size() == 0)
+        if (intersections == null)
             return null;
 
-        // 2 variables help
         GeoPoint closestPoint = intersections.get(0);
         double minDistance = this.p0.distance(closestPoint.point);
         double distance;

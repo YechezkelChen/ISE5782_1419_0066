@@ -97,8 +97,8 @@ public class RayTracerBasic extends RayTracerBase {
      */
     private Color calcLocalEffects(GeoPoint gp, Ray ray) {
         Color color = Color.BLACK;
-        Vector v = ray.getDir();
         Vector n = gp.geometry.getNormal(gp.point);
+        Vector v = ray.getDir();
         double nv = alignZero(n.dotProduct(v));
         if (nv == 0)
             return color;
@@ -168,13 +168,12 @@ public class RayTracerBasic extends RayTracerBase {
         Ray lightRay = new Ray(point, lightDirection);
 
         List<GeoPoint> intersections = this.scene.geometries.findGeoIntersections(lightRay);
-
         if (intersections == null)
             return true;
 
         double lightDistance = lightSource.getDistance(point);
         for (var geoPoint : intersections)
-            if (new Double3(geoPoint.point.distance(point)).lowerThan(lightDistance))
+            if (geoPoint.point.distance(point) < lightDistance)
                 return false;
 
         return true;
@@ -231,7 +230,7 @@ public class RayTracerBasic extends RayTracerBase {
 
     private GeoPoint findClosestIntersection(Ray reflectedRay) {
         List<GeoPoint> intersections = this.scene.geometries.findGeoIntersections(reflectedRay);
-        if (intersections == null) // || intersections.size() == 0)?????????????????????????????????????????????????????
+        if (intersections == null)
             return null;
         return reflectedRay.findClosestGeoPoint(intersections);
     }
