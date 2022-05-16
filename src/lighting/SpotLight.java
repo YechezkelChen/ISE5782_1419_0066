@@ -8,6 +8,7 @@ public class SpotLight extends PointLight {
      * direction vector of the spot light
      */
     private Vector direction;
+    private int angle = 1;
 
 
     /**
@@ -34,6 +35,11 @@ public class SpotLight extends PointLight {
         if(dirL <= 0)
             return Color.BLACK;
 
-        return super.getIntensity(p).scale(dirL);
+        return super.getIntensity(p).scale(Math.pow(dirL,angle));
+    }
+
+    public SpotLight setNarrowBeam(int angle){
+        this.angle = angle;
+        return this;
     }
 }
