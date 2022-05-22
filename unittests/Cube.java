@@ -25,68 +25,82 @@ public class Cube {
         Color brightRed = new Color(255, 102, 102);
         Color silver = new Color(192, 192, 192);
         Color brightOrange = new Color(255, 178, 102);
+
+        Material triangleMat = new Material().setKt(new Double3(0.2));
+
         Intersectable
                 Triangle1 = new Triangle(
                         new Point(-coordinate, -coordinate, -coordinate),
                         new Point(-coordinate, -coordinate, coordinate),
                         new Point(-coordinate, coordinate, coordinate))
-                .setEmission(pink),
+                        .setEmission(pink)
+                        .setMaterial(triangleMat),
                 Triangle2 = new Triangle(
                         new Point(coordinate, coordinate, -coordinate),
                         new Point(-coordinate, -coordinate, -coordinate),
                         new Point(-coordinate, coordinate, -coordinate))
-                        .setEmission(skyBlue),
+                        .setEmission(skyBlue)
+                        .setMaterial(triangleMat),
                 Triangle3 = new Triangle(
                         new Point(coordinate, -coordinate, coordinate),
                         new Point(-coordinate, -coordinate, -coordinate),
                         new Point(coordinate, -coordinate, -coordinate))
-                        .setEmission(gold),
+                        .setEmission(gold)
+                        .setMaterial(triangleMat),
                 Triangle4 = new Triangle(
                         new Point(coordinate, coordinate, -coordinate),
                         new Point(coordinate, -coordinate, -coordinate),
                         new Point(-coordinate, -coordinate, -coordinate))
-                        .setEmission(peach),
+                        .setEmission(peach)
+                        .setMaterial(triangleMat),
                 Triangle5 = new Triangle(
                         new Point(-coordinate, -coordinate, -coordinate),
                         new Point(-coordinate, coordinate, coordinate),
                         new Point(-coordinate, coordinate, -coordinate))
-                        .setEmission(brightGreen),
+                        .setEmission(brightGreen)
+                        .setMaterial(triangleMat),
                 Triangle6 = new Triangle(
                         new Point(coordinate, -coordinate, coordinate),
                         new Point(-coordinate, -coordinate, coordinate),
                         new Point(-coordinate, -coordinate, -coordinate))
                         .setEmission(purple)
-                        .setMaterial(new Material().setKd(0.2).setKs(0.2).setnShininess(30)),
+                        .setMaterial(triangleMat),
                 Triangle7 = new Triangle(
                         new Point(-coordinate, coordinate, coordinate),
                         new Point(-coordinate, -coordinate, coordinate),
                         new Point(coordinate, -coordinate, coordinate))
-                        .setEmission(strongPink),
+                        .setEmission(strongPink)
+                        .setMaterial(triangleMat),
                 Triangle8 = new Triangle(
                         new Point(coordinate, coordinate, coordinate),
                         new Point(coordinate, -coordinate, -coordinate),
                         new Point(coordinate, coordinate, -coordinate))
-                        .setEmission(brightYellow),
+                        .setEmission(brightYellow)
+                        .setMaterial(triangleMat),
                 Triangle9 = new Triangle(
                         new Point(coordinate, -coordinate, -coordinate),
                         new Point(coordinate, coordinate, coordinate),
                         new Point(coordinate, -coordinate, coordinate))
-                        .setEmission(blue),
+                        .setEmission(blue)
+                        .setMaterial(triangleMat),
                 Triangle10 = new Triangle(
                         new Point(coordinate, coordinate, coordinate),
                         new Point(coordinate, coordinate, -coordinate),
                         new Point(-coordinate, coordinate, -coordinate))
-                        .setEmission(brightRed),
+                        .setEmission(brightRed)
+                        .setMaterial(triangleMat),
                 Triangle11 = new Triangle(
                         new Point(coordinate, coordinate, coordinate),
                         new Point(-coordinate, coordinate, -coordinate),
                         new Point(-coordinate, coordinate, coordinate))
-                        .setEmission(silver),
+                        .setEmission(silver)
+                        .setMaterial(triangleMat),
                 Triangle12 = new Triangle(
                         new Point(coordinate, coordinate, coordinate),
                         new Point(-coordinate, coordinate, coordinate),
                         new Point(coordinate, -coordinate, coordinate))
-                        .setEmission(brightOrange);
+                        .setEmission(brightOrange)
+                        .setMaterial(triangleMat);
 
 
         Scene scene = new Scene("Test scene cube");
@@ -102,17 +116,17 @@ public class Cube {
         scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.WHITE), new Double3(0.01)));
         scene.lights.add(
                 new PointLight(
-                        new Color(1800, 1600, 1600),
-                        new Point(-400.0, -150.0, 350.0))
+                        new Color(255, 255, 255),
+                        new Point(0.0, 0.0, 0.0))
                         .setKl(4E-4).setKq(2E-5));
         scene.lights.add(
                 new PointLight(
-                        new Color(1800, 1600, 1600),
-                        new Point(150.0, -300.0, 750.0))
+                        new Color(255, 255, 255),
+                        new Point(0.0, 0.0, 0.0))
                         .setKl(4E-4).setKq(2E-5));
         scene.lights.add(
                 new DirectionalLight(
-                        new Color(1200, 1200, 1200),
+                        new Color(300, 300, 300),
                         new Vector(1.0, -1.0, -2.0)));
 
         scene.background = new Color(0, 25, 51);

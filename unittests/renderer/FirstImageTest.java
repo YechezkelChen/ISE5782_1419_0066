@@ -4,11 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static java.awt.Color.*;
 
-import renderer.ImageWriter;
 import lighting.*;
 import geometries.*;
 import primitives.*;
-import renderer.*;
 import scene.Scene;
 
 public class FirstImageTest {
@@ -24,23 +22,23 @@ public class FirstImageTest {
     public void FirstImg() {
         scene.geometries.add(
                 new Triangle(new Point(-100.0, 0.0, 0.0), new Point(0.0, 100.0, 0.0), new Point(0.0, 0.0, -100.0)).setEmission(new Color(RED))
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(5.0))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(5.0))),
                 new Triangle(new Point(0.0, 100.0, 0.0), new Point(100.0, 0.0, 0.0), new Point(0.0, 0.0, -100.0)).setEmission(new Color(RED))
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(5.0))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(5.0))),
                 new Triangle(new Point(100.0, 0.0, 0.0), new Point(0.0, -100.0, 0.0), new Point(0.0, 0.0, -100.0)).setEmission(new Color(RED))
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(5.0))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(5.0))),
                 new Triangle(new Point(0.0, -100.0, 0.0), new Point(-100.0, 0.0, 0.0), new Point(0.0, 0.0, -100.0)).setEmission(new Color(RED))
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(5.0))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(5.0))),
 
                 new Sphere(new Point(0.0, 0.0, 50.0), 50).setEmission(new Color(YELLOW)) //
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(0.3))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(0.3))),
 
                 new Triangle(new Point(-50.0, -50.0, 100.0), new Point(50.0, -50.0, 100.0), new Point(0.0, 0.0, 150.0)).setEmission(new Color(BLUE))
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(5.0))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(5.0))),
                 new Triangle(new Point(50.0, -50.0, 100.0), new Point(0.0, 75.0, 100.0), new Point(0.0, 0.0, 150.0)).setEmission(new Color(BLUE))
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(5.0))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(5.0))),
                 new Triangle(new Point(0.0, 75.0, 100.0), new Point(-50.0, -50.0, 100.0), new Point(0.0, 0.0, 150.0)).setEmission(new Color(BLUE))
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(5.0)))
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(5.0)))
         );
 
         scene.lights.add( //
@@ -60,23 +58,23 @@ public class FirstImageTest {
     public void FirstImg2() {
         scene.geometries.add(
                 new Sphere(new Point(30.0, 0.0, 0.0), 10).setEmission(new Color(BLUE)) //
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(0.3))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(0.3))),
                 new Sphere(new Point(30.0, 0.0, 0.0), 20).setEmission(new Color(RED)) //
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(0.3))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(0.3))),
                 new Sphere(new Point(-30.0, 0.0, 0.0), 10).setEmission(new Color(GREEN)) //
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(0.3))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(0.3))),
                 new Sphere(new Point(-30.0, 0.0, 0.0), 20).setEmission(new Color(YELLOW)) //
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(0.3))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(0.3))),
                 new Sphere(new Point(0.0, 0.0, 0.0), 80).setEmission(new Color(GRAY)) //
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(0.3))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(0.3))),
 
 
                 new Triangle(new Point(-80.0, 0.0, 30.0), new Point(-80.0, 0.0, -30.0), new Point(-100.0, 0.0, 0.0)).setEmission(new Color(BLUE))
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(5.0))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(5.0))),
                 new Triangle(new Point(80.0, 0.0, 30.0), new Point(80.0, 0.0, -30.0), new Point(100.0, 0.0, 0.0)).setEmission(new Color(BLUE))
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(5.0))),
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(5.0))),
                 new Triangle(new Point(50.0, -80.0, -40.0), new Point(-50.0, -80.0, -40.0), new Point(0.0, -80.0, -70.0)).setEmission(new Color(YELLOW))
-                        .setMaterial(new Material().setKd(0.4).setKs(0.3).setnShininess(100).setKt(new Double3(5.0)))
+                        .setMaterial(new Material().setKd(new Double3(0.4)).setKs(new Double3(0.3)).setNShininess(100).setKt(new Double3(5.0)))
         );
 
         scene.lights.add( //

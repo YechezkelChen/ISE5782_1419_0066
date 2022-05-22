@@ -33,19 +33,8 @@ public class Material {
      * @param kD The diffuse color of the material.
      * @return The material itself.
      */
-    public Material setkD(Double3 kD) {
+    public Material setKd(Double3 kD) {
         this.kD = kD;
-        return this;
-    }
-
-    /**
-     * Set the diffuse coefficient to the same value for all three color channels.
-     *
-     * @param kD The diffuse color of the material.
-     * @return The material itself.
-     */
-    public Material setKd(double kD) {
-        this.kD = new Double3(kD);
         return this;
     }
 
@@ -58,19 +47,8 @@ public class Material {
      * @param kS The specular color of the material.
      * @return The material itself.
      */
-    public Material setkS(Double3 kS) {
+    public Material setKs(Double3 kS) {
         this.kS = kS;
-        return this;
-    }
-
-    /**
-     * Set the specular coefficient to the same value for all three color channels.
-     *
-     * @param kS specular coefficient
-     * @return The material itself.
-     */
-    public Material setKs(double kS) {
-        this.kS = new Double3(kS);
         return this;
     }
 
@@ -102,7 +80,7 @@ public class Material {
      * @param nShininess The shininess of the material.
      * @return The material object itself.
      */
-    public Material setnShininess(int nShininess) {
+    public Material setNShininess(int nShininess) {
         this.nShininess = nShininess;
         return this;
     }

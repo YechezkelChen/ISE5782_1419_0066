@@ -13,43 +13,110 @@ import static primitives.Util.*;
  */
 public class Camera {
 
+    /**
+     * The location of the camera.
+      */
     private Point p0;
 
+    /**
+     * A vector that points to the direction the camera is looking at.
+     */
     private Vector vTo;
+
+    /**
+     * A vector that points up.
+     */
     private Vector vUp;
+
+    /**
+     * The vector that points to the right.
+     */
     private Vector vRight;
 
+    /**
+     * A private variable that is used to store the width of the view plane.
+     */
     private double width;
+
+    /**
+     * A private variable that is used to store the height of the view plane.
+     */
     private double height;
+
+    /**
+     * The distance from the camera to the view plane.
+     */
     private double distance;
 
+    /**
+     * A private variable that is used to store the image writer.
+     */
     private ImageWriter imageWriter;
+
+    /**
+     * A pointer to the ray tracer that will be used to trace the rays.
+     */
     private RayTracerBase rayTracer;
 
+    /**
+     * This function returns the value of the private variable p0.
+     *
+     * @return The point p0.
+     */
     public Point getP0() {
         return p0;
     }
 
-    public Vector getvTo() {
+    /**
+     * This function returns the vector to the destination.
+     *
+     * @return The vector vTo is being returned.
+     */
+    public Vector getVTo() {
         return vTo;
     }
 
-    public Vector getvUp() {
+    /**
+     * This function returns the value of the vUp variable.
+     *
+     * @return The vector vUp is being returned.
+     */
+    public Vector getVUp() {
         return vUp;
     }
 
-    public Vector getvRight() {
+    /**
+     * This function returns the value of the vRight variable.
+     *
+     * @return The vector vRight is being returned.
+     */
+    public Vector getVRight() {
         return vRight;
     }
 
+    /**
+     * This function returns the width of the rectangle.
+     *
+     * @return The width of the rectangle.
+     */
     public double getWidth() {
         return width;
     }
 
+    /**
+     * This function returns the height of the rectangle.
+     *
+     * @return The height of the rectangle.
+     */
     public double getHeight() {
         return height;
     }
 
+    /**
+     * This function returns the distance between the current location and the destination.
+     *
+     * @return The distance between the two points.
+     */
     public double getDistance() {
         return distance;
     }
@@ -128,33 +195,26 @@ public class Camera {
     }
 
     /**
-     * Construct a ray from the image center to the pixel at (i,j)
+     * For every pixel in the image, we cast a ray from the camera through the pixel, and then we color the pixel according
+     * to the color of the closest intersection
      *
-     * @param nX The amount of columns (row width) of the pixel in the image.
-     * @param nY The amount of rows (column height) of the pixel in the image.
-     * @param j  The column of the pixel in the image.
-     * @param i  The row of the pixel in the image.
-     * @return A construct ray.
+     * @return The camera itself.
      */
-    public Ray constructRay(int nX, int nY, int j, int i) {
-        // Image center
-        Point Pc = this.p0.add(this.vTo.scale(this.distance));
+    public Camera renderImage() {
+        try {
+            this.checkImgWriter();
+            this.checkRayTracer();
+        } catch (MissingResourceException e) {
+            throw new UnsupportedOperationException("Render didn't receive " + e.getClassName());
+        }
+        for (int i = 0; i < this.imageWriter.getNx(); i++)
+            for (int j = 0; j < this.imageWriter.getNy(); j++) {
+                //build for every pixel is
+                Color pixelColor = this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), j, i);
+                this.imageWriter.writePixel(j, i, pixelColor);
+            }
 
-        //Ratio (pixel width & height)
-        double Ry = this.height / nY;
-        double Rx = this.width / nX;
-
-        //Pixel[i,j] center
-        double yI = -(i - (nY - 1) / 2.0) * Ry;
-        double xJ = (j - (nX - 1) / 2.0) * Rx;
-
-        Point pIJ = Pc;
-        if (xJ != 0) pIJ = pIJ.add(vRight.scale(xJ));
-        if (yI != 0) pIJ = pIJ.add(vUp.scale(yI));
-
-        Vector vIJ = pIJ.subtract(this.p0);
-
-        return new Ray(this.p0, vIJ);
+        return this;
     }
 
     /**
@@ -187,28 +247,34 @@ public class Camera {
         return this.rayTracer.traceRay(ray);
     }
 
-
     /**
-     * For every pixel in the image, we cast a ray from the camera through the pixel, and then we color the pixel according
-     * to the color of the closest intersection
+     * Construct a ray from the image center to the pixel at (i,j)
      *
-     * @return The camera itself.
+     * @param nX The amount of columns (row width) of the pixel in the image.
+     * @param nY The amount of rows (column height) of the pixel in the image.
+     * @param j  The column of the pixel in the image.
+     * @param i  The row of the pixel in the image.
+     * @return A construct ray.
      */
-    public Camera renderImage() {
-        try {
-            this.checkImgWriter();
-            this.checkRayTracer();
-        } catch (MissingResourceException e) {
-            throw new UnsupportedOperationException("Render didn't receive " + e.getClassName());
-        }
-        for (int i = 0; i < this.imageWriter.getNx(); i++)
-            for (int j = 0; j < this.imageWriter.getNy(); j++) {
-                //build for every pixel is
-                Color pixelColor = this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), j, i);
-                this.imageWriter.writePixel(j, i, pixelColor);
-            }
+    public Ray constructRay(int nX, int nY, int j, int i) {
+        // Image center
+        Point Pc = this.p0.add(this.vTo.scale(this.distance));
 
-        return this;
+        //Ratio (pixel width & height)
+        double Ry = this.height / nY;
+        double Rx = this.width / nX;
+
+        //Pixel[i,j] center
+        double yI = -(i - (nY - 1) / 2.0) * Ry;
+        double xJ = (j - (nX - 1) / 2.0) * Rx;
+
+        Point pIJ = Pc;
+        if (xJ != 0) pIJ = pIJ.add(vRight.scale(xJ));
+        if (yI != 0) pIJ = pIJ.add(vUp.scale(yI));
+
+        Vector vIJ = pIJ.subtract(this.p0);
+
+        return new Ray(this.p0, vIJ);
     }
 
     /**
