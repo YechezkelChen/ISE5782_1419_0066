@@ -132,8 +132,9 @@ public class Cube {
         scene.background = new Color(0, 25, 51);
 
         camera1.setImageWriter(new ImageWriter("cube", 600, 600)) //
+                .setAntiAliasing(true)
+                .setGridSize(4)
                 .renderImage();
         camera1.writeToImage();
     }
-
 }

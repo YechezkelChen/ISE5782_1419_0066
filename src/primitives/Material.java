@@ -80,7 +80,7 @@ public class Material {
      * @param nShininess The shininess of the material.
      * @return The material object itself.
      */
-    public Material setNShininess(int nShininess) {
+    public Material setShininess(int nShininess) {
         this.nShininess = nShininess;
         return this;
     }

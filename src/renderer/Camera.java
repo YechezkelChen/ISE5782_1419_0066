@@ -59,6 +59,16 @@ public class Camera {
     private RayTracerBase rayTracer;
 
     /**
+     * A boolean variable that determines whether to use anti-aliasing.
+      */
+    private boolean antiAliasing = false;
+
+    /**
+     * It's a variable that is used to store the size of the grid.
+      */
+    private int gridSize;
+
+    /**
      * This function returns the value of the private variable p0.
      *
      * @return The point p0.
@@ -119,6 +129,24 @@ public class Camera {
      */
     public double getDistance() {
         return distance;
+    }
+
+    /**
+     * > Returns whether or not anti-aliasing is enabled
+     *
+     * @return The boolean value of the variable antiAliasing.
+     */
+    public boolean isAntiAliasing() {
+        return antiAliasing;
+    }
+
+    /**
+     * This function returns the gridSize variable.
+     *
+     * @return The gridSize variable is being returned.
+     */
+    public int getGridSize() {
+        return gridSize;
     }
 
     /**
@@ -195,8 +223,33 @@ public class Camera {
     }
 
     /**
-     * For every pixel in the image, we cast a ray from the camera through the pixel, and then we color the pixel according
-     * to the color of the closest intersection
+     * This function sets the antiAliasing variable to the value of the parameter antiAliasing and returns the camera
+     * object.
+     *
+     * @param antiAliasing Whether or not to use anti-aliasing.
+     * @return The camera object itself.
+     */
+    public Camera setAntiAliasing(boolean antiAliasing) {
+        this.antiAliasing = antiAliasing;
+        return this;
+    }
+
+    /**
+     * > Sets the grid size of the camera
+     *
+     * @param gridSize The size of the grid in pixels.
+     * @return The camera object itself.
+     */
+    public Camera setGridSize(int gridSize) {
+        this.gridSize = gridSize;
+        return this;
+    }
+
+    /**
+     * The function receives a boolean value that determines whether or not to use anti-aliasing. If anti-aliasing is
+     * enabled, the function will call the `fragmentPixelToGrid` function, which will return a color value for the pixel.
+     * If anti-aliasing is disabled, the function will call the `castRay` function, which will return a color value for the
+     * pixel
      *
      * @return The camera itself.
      */
@@ -207,10 +260,15 @@ public class Camera {
         } catch (MissingResourceException e) {
             throw new UnsupportedOperationException("Render didn't receive " + e.getClassName());
         }
+        Color pixelColor;
+
         for (int i = 0; i < this.imageWriter.getNx(); i++)
             for (int j = 0; j < this.imageWriter.getNy(); j++) {
-                //build for every pixel is
-                Color pixelColor = this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), j, i);
+                if(antiAliasing)
+                    pixelColor = this.fragmentPixelToGrid(i, j);
+                else
+                    pixelColor = this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), j, i);
+
                 this.imageWriter.writePixel(j, i, pixelColor);
             }
 
@@ -234,6 +292,25 @@ public class Camera {
     }
 
     /**
+     * It takes a pixel and divides it into a grid of smaller pixels, and then casts a ray through each of the smaller
+     * pixels and averages the color of the smaller pixels to get the color of the original pixel
+     *
+     * @param i the x coordinate of the pixel
+     * @param j the x coordinate of the pixel
+     * @return The color of the pixel.
+     */
+    private Color fragmentPixelToGrid(int i, int j) {
+        double grid = 1.0 / this.gridSize;
+        Color pixelColor = Color.BLACK;
+
+        for (float fragmentI = i; fragmentI < i + 1.0f; fragmentI += grid)
+            for (float fragmentJ = j; fragmentJ < j + 1.0f; fragmentJ += grid)
+                pixelColor = pixelColor.add(this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), fragmentJ, fragmentI));
+
+        return pixelColor.reduce(this.gridSize*this.gridSize);
+    }
+
+    /**
      * Given a pixel's coordinates, construct a ray and trace it through the scene
      *
      * @param nX The amount of columns (row width) of the pixel in the image.
@@ -242,7 +319,7 @@ public class Camera {
      * @param i  The row of the pixel in the image.
      * @return The color of the pixel.
      */
-    private Color castRay(int nX, int nY, int j, int i) {
+    private Color castRay(int nX, int nY, float j, float i) {
         Ray ray = this.constructRay(nX, nY, j, i);
         return this.rayTracer.traceRay(ray);
     }
@@ -256,7 +333,7 @@ public class Camera {
      * @param i  The row of the pixel in the image.
      * @return A construct ray.
      */
-    public Ray constructRay(int nX, int nY, int j, int i) {
+    public Ray constructRay(int nX, int nY, float j, float i) {
         // Image center
         Point Pc = this.p0.add(this.vTo.scale(this.distance));
 
