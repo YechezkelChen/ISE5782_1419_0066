@@ -1,5 +1,3 @@
-package renderer;
-
 import org.junit.jupiter.api.Test;
 
 import static java.awt.Color.*;
@@ -7,6 +5,9 @@ import static java.awt.Color.*;
 import lighting.*;
 import geometries.*;
 import primitives.*;
+import renderer.Camera;
+import renderer.ImageWriter;
+import renderer.RayTracerBasic;
 import scene.Scene;
 
 public class FirstImageTest {

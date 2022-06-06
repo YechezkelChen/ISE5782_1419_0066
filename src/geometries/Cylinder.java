@@ -2,6 +2,7 @@ package geometries;
 
 import primitives.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.*;
@@ -64,7 +65,7 @@ public class Cylinder extends Tube {
 
         double t = v.dotProduct(P.subtract(P0));
         //check if the point on the bottom edge
-        if (isZero(t))
+        if (isZero(t) || isZero(t * t))
             return v.scale(-1);
 
         //check if the point on the top edge
@@ -83,6 +84,68 @@ public class Cylinder extends Tube {
      */
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-        return null;
+
+        List<GeoPoint> intersections = null;
+        List<GeoPoint> intersectionsHelper;
+
+        Vector va = this.axisRay.getDir();
+        Point p1 = this.axisRay.getP0();
+        Point p2 = p1.add(va.scale(this.height));
+
+        //1) get the intersections with tube that includes the cylinder
+        //2) get the intersections with bottom plane
+        //3) get the intersections with top plane
+
+        intersectionsHelper = super.findGeoIntersectionsHelper(ray); //get intersections for tube
+        if (intersectionsHelper != null) {
+            intersections = new LinkedList<>();
+
+            //Add all intersections of tube that are in the cylinder's bounders
+            for (GeoPoint geoPoint : intersectionsHelper)
+                if (va.dotProduct(geoPoint.point.subtract(p1)) > 0 && va.dotProduct(geoPoint.point.subtract(p2)) < 0)
+                    intersections.add(new GeoPoint(this, geoPoint.point));
+        }
+
+        intersectionsHelper = findIntersectionsWithBase(ray, new Plane(p1,va)); //intersections with bottom's plane
+        if(intersectionsHelper != null){
+            if(intersections == null)
+                intersections = new LinkedList<>();
+            intersections.addAll(intersectionsHelper);
+        }
+
+        intersectionsHelper = findIntersectionsWithBase(ray, new Plane(p2, va)); //intersections with top's plane
+        if(intersectionsHelper != null){
+            if(intersections == null)
+                intersections = new LinkedList<>();
+            intersections.addAll(intersectionsHelper);
+        }
+        if(intersections == null || intersections.size() == 0)
+            return null;
+
+        return intersections;
+    }
+
+    private List<GeoPoint> findIntersectionsWithBase(Ray ray, Plane basePlane) {
+        List<GeoPoint> intersections = null;
+
+        List<GeoPoint> intersections1 = basePlane.findGeoIntersectionsHelper(ray); //intersections with bottom's plane
+        if (intersections1 != null) {
+            intersections = new LinkedList<>();
+
+            //Add all intersections of plane that are in the base's bounders
+            for (GeoPoint geoPoint : intersections1) {
+                if (geoPoint.point.equals(basePlane.getQ0())) //to avoid vector ZERO
+                    intersections.add(new GeoPoint(this, geoPoint.point));
+
+                //Formula that checks that point is inside the base
+                else if ((geoPoint.point.subtract(basePlane.getQ0()).dotProduct(geoPoint.point.subtract(basePlane.getQ0())) < this.radius * this.radius))
+                    intersections.add(new GeoPoint(this, geoPoint.point));
+
+            }
+        }
+        if(intersections == null || intersections.size() == 0)
+            return null;
+
+        return intersections;
     }
 }

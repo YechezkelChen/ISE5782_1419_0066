@@ -1,10 +1,14 @@
 package renderer;
 
+import geometries.Intersectable;
+import geometries.Plane;
 import primitives.*;
 import primitives.Vector;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
+import static java.lang.Math.sqrt;
 import static primitives.Util.*;
 
 
@@ -15,7 +19,7 @@ public class Camera {
 
     /**
      * The location of the camera.
-      */
+     */
     private Point p0;
 
     /**
@@ -58,15 +62,55 @@ public class Camera {
      */
     private RayTracerBase rayTracer;
 
+
+    /** Anti Aliasing properties. **/
+
     /**
      * A boolean variable that determines whether to use anti-aliasing.
-      */
+     */
     private boolean antiAliasing = false;
 
     /**
      * It's a variable that is used to store the size of the grid.
+     */
+    private int gridSize = 3;
+
+
+    /** Depth Of Filed properties. **/
+
+    /**
+     * A boolean variable that determines whether to use depth of filed.
+     */
+    private boolean depthOfFiled = false;
+
+    /** Aperture properties. **/
+
+    /**
+     * number with integer square for the matrix of points.
+     */
+    private int APERTURE_NUMBER_OF_POINTS = 100;
+
+    /**
+     * Declaring a variable called apertureSize of type double.
       */
-    private int gridSize;
+    private double apertureSize;
+
+    /**
+     * Creating an array of Point objects.
+     */
+    private Point[] aperturePoints;
+
+    /** Focal plane parameters. **/
+
+    /**
+     * as instructed it is a constant value of the class.
+     */
+    private double FP_distance;
+
+    /**
+     * Declaring a variable called FOCAL_PLANE of type Plane.
+     */
+    private Plane FOCAL_PLANE;
 
     /**
      * This function returns the value of the private variable p0.
@@ -166,6 +210,8 @@ public class Camera {
         this.vTo = vTo.normalize();
         this.vUp = vUp.normalize();
         this.vRight = vTo.crossProduct(vUp).normalize();
+
+        this.apertureSize = 0; //initialize DoF parameters.
     }
 
     /**
@@ -223,29 +269,6 @@ public class Camera {
     }
 
     /**
-     * This function sets the antiAliasing variable to the value of the parameter antiAliasing and returns the camera
-     * object.
-     *
-     * @param antiAliasing Whether or not to use anti-aliasing.
-     * @return The camera object itself.
-     */
-    public Camera setAntiAliasing(boolean antiAliasing) {
-        this.antiAliasing = antiAliasing;
-        return this;
-    }
-
-    /**
-     * > Sets the grid size of the camera
-     *
-     * @param gridSize The size of the grid in pixels.
-     * @return The camera object itself.
-     */
-    public Camera setGridSize(int gridSize) {
-        this.gridSize = gridSize;
-        return this;
-    }
-
-    /**
      * The function receives a boolean value that determines whether or not to use anti-aliasing. If anti-aliasing is
      * enabled, the function will call the `fragmentPixelToGrid` function, which will return a color value for the pixel.
      * If anti-aliasing is disabled, the function will call the `castRay` function, which will return a color value for the
@@ -260,17 +283,37 @@ public class Camera {
         } catch (MissingResourceException e) {
             throw new UnsupportedOperationException("Render didn't receive " + e.getClassName());
         }
-        Color pixelColor;
 
         for (int i = 0; i < this.imageWriter.getNx(); i++)
             for (int j = 0; j < this.imageWriter.getNy(); j++) {
-                if(antiAliasing)
-                    pixelColor = this.fragmentPixelToGrid(i, j);
+                if (antiAliasing)
+                    this.imageWriter.writePixel(j, i, this.fragmentPixelToGrid(i, j));
                 else
-                    pixelColor = this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), j, i);
-
-                this.imageWriter.writePixel(j, i, pixelColor);
+                    this.imageWriter.writePixel(j, i, this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), j, i));
             }
+
+        return this;
+    }
+
+    public Camera renderImageThreaded() {
+        try {
+            this.checkImgWriter();
+            this.checkRayTracer();
+        } catch (MissingResourceException e) {
+            throw new UnsupportedOperationException("Render didn't receive " + e.getClassName());
+        }
+
+        final int nX = this.imageWriter.getNx();
+        final int nY = this.imageWriter.getNy();
+
+        IntStream.range(0,nX).parallel().forEach(i->{
+            IntStream.range(0,nY).parallel().forEach(j->{
+                if (antiAliasing && checkColor(nX, nY, j, i))
+                    this.imageWriter.writePixel(j, i, this.fragmentPixelToGrid(i, j));
+                else
+                    this.imageWriter.writePixel(j, i, this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), j, i));
+            });
+        });
 
         return this;
     }
@@ -292,22 +335,28 @@ public class Camera {
     }
 
     /**
-     * It takes a pixel and divides it into a grid of smaller pixels, and then casts a ray through each of the smaller
-     * pixels and averages the color of the smaller pixels to get the color of the original pixel
+     * The function checks if the color of the pixel is the same as the color of the pixel in the top left, top right,
+     * bottom left and bottom right corners of the pixel
      *
-     * @param i the x coordinate of the pixel
-     * @param j the x coordinate of the pixel
-     * @return The color of the pixel.
+     * @param nX number of pixels in the x axis
+     * @param nY number of pixels in the y axis
+     * @param j the current column
+     * @param i the row of the pixel
+     * @return a boolean value.
      */
-    private Color fragmentPixelToGrid(int i, int j) {
-        double grid = 1.0 / this.gridSize;
-        Color pixelColor = Color.BLACK;
+    private boolean checkColor(int nX, int nY, int j, int i) {
 
-        for (float fragmentI = i; fragmentI < i + 1.0f; fragmentI += grid)
-            for (float fragmentJ = j; fragmentJ < j + 1.0f; fragmentJ += grid)
-                pixelColor = pixelColor.add(this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), fragmentJ, fragmentI));
+        Point pc = this.p0.add(this.vTo.scale(this.distance));
+        Point pij = getCenterPoint(nX, nY, j, i, pc);
+        Color topLeft, topRight, bottomLeft, bottomRight;
+        double ry = alignZero(this.height/ nY);
+        double rx = alignZero(this.width/ nX);
 
-        return pixelColor.reduce(this.gridSize*this.gridSize);
+        topLeft = castRay((int)(pij.getX() + -rx/2), (int)(pij.getY() + ry/2), j, i);
+        topRight = castRay((int)(pij.getX() + rx/2), (int)(pij.getY() + ry/2), j, i);
+        bottomLeft = castRay((int)(pij.getX() + -rx/2), (int)(pij.getY() + -ry/2), j, i);
+        bottomRight = castRay((int)(pij.getX() + rx/2), (int)(pij.getY() + -ry/2), j, i);
+        return topLeft.equals(topRight) && topLeft.equals(bottomLeft) && topLeft.equals(bottomRight);
     }
 
     /**
@@ -321,6 +370,9 @@ public class Camera {
      */
     private Color castRay(int nX, int nY, float j, float i) {
         Ray ray = this.constructRay(nX, nY, j, i);
+        if(depthOfFiled) // if there is the improvement of depth of filed
+            return averagedBeamColor(ray);
+
         return this.rayTracer.traceRay(ray);
     }
 
@@ -337,6 +389,24 @@ public class Camera {
         // Image center
         Point Pc = this.p0.add(this.vTo.scale(this.distance));
 
+        Point pIJ = getCenterPoint(nX, nY, j, i, Pc);
+        Vector vIJ = pIJ.subtract(this.p0);
+
+        return new Ray(this.p0, vIJ);
+    }
+
+    /**
+     * > Given the pixel's coordinates, the number of pixels in the image, and the camera's center point, return the
+     * pixel's center point
+     *
+     * @param nX number of pixels in the horizontal direction
+     * @param nY number of pixels in the vertical direction
+     * @param j the x-coordinate of the pixel in the image
+     * @param i the row of the pixel
+     * @param pc The center of the image plane
+     * @return The center point of the pixel.
+     */
+    private Point getCenterPoint(int nX, int nY, float j, float i, Point pc) {
         //Ratio (pixel width & height)
         double Ry = this.height / nY;
         double Rx = this.width / nX;
@@ -345,27 +415,25 @@ public class Camera {
         double yI = -(i - (nY - 1) / 2.0) * Ry;
         double xJ = (j - (nX - 1) / 2.0) * Rx;
 
-        Point pIJ = Pc;
+        Point pIJ = pc;
         if (xJ != 0) pIJ = pIJ.add(vRight.scale(xJ));
         if (yI != 0) pIJ = pIJ.add(vUp.scale(yI));
 
-        Vector vIJ = pIJ.subtract(this.p0);
-
-        return new Ray(this.p0, vIJ);
+        return pIJ;
     }
 
     /**
      * "Paint only the grid lines, leaving the background as it was."
-     *
+     * <p>
      * The function is called with two parameters:
-     *
+     * <p>
      * * interval - the interval between the grid lines
      * * color - the color of the grid lines
-     *
+     * <p>
      * The function is called on a Camera object, and returns the same Camera object
      *
      * @param interval the interval between the grid lines
-     * @param color The color of the grid lines
+     * @param color    The color of the grid lines
      * @return The camera itself.
      */
     public Camera printGrid(int interval, Color color) {
@@ -391,5 +459,137 @@ public class Camera {
         this.checkImgWriter();
         this.imageWriter.writeToImage();
         return this;
+    }
+
+    /** Anti Aliasing improvements **/
+
+    /**
+     * This function sets the antiAliasing variable to the value of the parameter antiAliasing and returns the camera
+     * object.
+     *
+     * @param antiAliasing Whether or not to use anti-aliasing.
+     * @return The camera object itself.
+     */
+    public Camera setAntiAliasing(boolean antiAliasing) {
+        this.antiAliasing = antiAliasing;
+        return this;
+    }
+
+    /**
+     * > Sets the grid size of the camera
+     *
+     * @param gridSize The size of the grid in pixels.
+     * @return The camera object itself.
+     */
+    public Camera setGridSize(int gridSize) {
+        this.gridSize = gridSize;
+        return this;
+    }
+
+    /**
+     * It takes a pixel and divides it into a grid of smaller pixels, and then casts a ray through each of the smaller
+     * pixels and averages the color of the smaller pixels to get the color of the original pixel
+     *
+     * @param i the x coordinate of the pixel
+     * @param j the x coordinate of the pixel
+     * @return The color of the pixel.
+     */
+    private Color fragmentPixelToGrid(int i, int j) {
+        double grid = 1.0 / this.gridSize;
+        Color pixelColor = Color.BLACK;
+
+        for (float fragmentI = i; fragmentI < i + 1.0f; fragmentI += grid)
+            for (float fragmentJ = j; fragmentJ < j + 1.0f; fragmentJ += grid)
+                pixelColor = pixelColor.add(this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), fragmentJ, fragmentI));
+
+        return pixelColor.reduce(this.gridSize * this.gridSize);
+    }
+
+
+
+    /** Depth Of Filed improvements **/
+
+    /**
+     * This function sets the depth of field to the value of the parameter.
+     *
+     * @param depthOfFiled If true, the camera will have a depth of field effect.
+     */
+    public Camera setDepthOfFiled(boolean depthOfFiled) {
+        this.depthOfFiled = depthOfFiled;
+        return this;
+    }
+
+    /**
+     * The function sets the distance of the focal plane from the camera's position
+     *
+     * @param distance The distance from the camera to the focal plane.
+     * @return The camera itself.
+     */
+    public Camera setFPDistance(double distance) {
+        this.FP_distance = distance;
+        this.FOCAL_PLANE = new Plane(this.p0.add(this.vTo.scale(FP_distance)), this.vTo);
+        return this;
+    }
+
+    /**
+     * This function sets the aperture size of the camera and initializes the points of the aperture.
+     *
+     * @param size the size of the aperture.
+     * @return The camera object itself.
+     */
+    public Camera setApertureSize(double size) {
+        this.apertureSize = size;
+
+        //initializing the points of the aperture.
+        if (size != 0) initializeAperturePoint();
+
+        return this;
+    }
+
+    /**
+     * The function initializes the aperture points array by calculating the distance between the points and the initial
+     * point, and then initializing the array with the points
+     */
+    private void initializeAperturePoint() {
+        //the number of points in a row
+        int pointsInRow = (int) sqrt(this.APERTURE_NUMBER_OF_POINTS);
+
+        //the array of point saved as an array
+        this.aperturePoints = new Point[pointsInRow * pointsInRow];
+
+        //calculating the initial values.
+        double pointsDistance = (this.apertureSize * 2) / pointsInRow;
+        //calculate the initial point to be the point with coordinates outside the aperture in the down left point, so we won`t have to deal with illegal vectors.
+        Point initialPoint = this.p0
+                .add(this.vUp.scale(-this.apertureSize - pointsDistance / 2)
+                        .add(this.vRight.scale(-this.apertureSize - pointsDistance / 2)));
+
+        //initializing the points array
+        for (int i = 1; i <= pointsInRow; i++) {
+            for (int j = 1; j <= pointsInRow; j++) {
+                this.aperturePoints[(i - 1) + (j - 1) * pointsInRow] = initialPoint
+                        .add(this.vUp.scale(i * pointsDistance).add(this.vRight.scale(j * pointsDistance)));
+            }
+        }
+    }
+
+    /**
+     * It takes a ray, finds the point where it intersects the focal plane, and then shoots rays from the aperture points
+     * to that point. It then averages the colors of all the rays
+     *
+     * @param ray The ray that is being traced.
+     * @return The average color of the image.
+     */
+    private Color averagedBeamColor(Ray ray) {
+        Color averageColor = Color.BLACK, apertureColor;
+        int numOfPoints = this.aperturePoints.length;
+        Ray apertureRay;
+        Point focalPoint = this.FOCAL_PLANE.findGeoIntersections(ray).get(0).point;
+        for (Point aperturePoint : this.aperturePoints) {
+            apertureRay = new Ray(aperturePoint, focalPoint.subtract(aperturePoint));
+            apertureColor = rayTracer.traceRay(apertureRay);
+            averageColor = averageColor.add(apertureColor.reduce(numOfPoints));
+        }
+        return averageColor;
     }
 }
