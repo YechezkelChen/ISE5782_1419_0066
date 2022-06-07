@@ -92,7 +92,7 @@ public class Camera {
 
     /**
      * Declaring a variable called apertureSize of type double.
-      */
+     */
     private double apertureSize;
 
     /**
@@ -269,10 +269,9 @@ public class Camera {
     }
 
     /**
-     * The function receives a boolean value that determines whether or not to use anti-aliasing. If anti-aliasing is
-     * enabled, the function will call the `fragmentPixelToGrid` function, which will return a color value for the pixel.
-     * If anti-aliasing is disabled, the function will call the `castRay` function, which will return a color value for the
-     * pixel
+     * The function iterates over the pixels of the image, and for each pixel it casts a ray through the center of the
+     * pixel and checks if the ray intersects with any of the scene's geometries. If it does, it calculates the color of
+     * the pixel
      *
      * @return The camera itself.
      */
@@ -284,9 +283,12 @@ public class Camera {
             throw new UnsupportedOperationException("Render didn't receive " + e.getClassName());
         }
 
-        for (int i = 0; i < this.imageWriter.getNx(); i++)
-            for (int j = 0; j < this.imageWriter.getNy(); j++) {
-                if (antiAliasing)
+        final int nX = this.imageWriter.getNx();
+        final int nY = this.imageWriter.getNy();
+
+        for (int i = 0; i < nX; i++)
+            for (int j = 0; j < nY; j++) {
+                if (antiAliasing && adaptiveGrid(nX, nY, j, i))
                     this.imageWriter.writePixel(j, i, this.fragmentPixelToGrid(i, j));
                 else
                     this.imageWriter.writePixel(j, i, this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), j, i));
@@ -295,6 +297,14 @@ public class Camera {
         return this;
     }
 
+    /**
+     * We're going to iterate over the pixels in the image, and for each pixel we're going to create thread and cast a ray
+     * from the camera through the pixel, and then we're going to check if the ray intersects with any of the objects in
+     * the scene. If it does, we're going to calculate the color of the pixel based on the intersection point. If it
+     * doesn't, we're going to set the color of the pixel to the background color
+     *
+     * @return The camera itself.
+     */
     public Camera renderImageThreaded() {
         try {
             this.checkImgWriter();
@@ -306,9 +316,9 @@ public class Camera {
         final int nX = this.imageWriter.getNx();
         final int nY = this.imageWriter.getNy();
 
-        IntStream.range(0,nX).parallel().forEach(i->{
-            IntStream.range(0,nY).parallel().forEach(j->{
-                if (antiAliasing && checkColor(nX, nY, j, i))
+        IntStream.range(0, nX).parallel().forEach(i -> {
+            IntStream.range(0, nY).parallel().forEach(j -> {
+                if (antiAliasing && adaptiveGrid(nX, nY, j, i))
                     this.imageWriter.writePixel(j, i, this.fragmentPixelToGrid(i, j));
                 else
                     this.imageWriter.writePixel(j, i, this.castRay(this.imageWriter.getNx(), this.imageWriter.getNy(), j, i));
@@ -338,24 +348,24 @@ public class Camera {
      * The function checks if the color of the pixel is the same as the color of the pixel in the top left, top right,
      * bottom left and bottom right corners of the pixel
      *
-     * @param nX number of pixels in the x axis
-     * @param nY number of pixels in the y axis
-     * @param j the current column
-     * @param i the row of the pixel
+     * @param nX number of pixels in the view plane
+     * @param nY number of pixels in the view plane
+     * @param j  the current column
+     * @param i  the row of the pixel
      * @return a boolean value.
      */
-    private boolean checkColor(int nX, int nY, int j, int i) {
+    private boolean adaptiveGrid(int nX, int nY, int j, int i) {
 
         Point pc = this.p0.add(this.vTo.scale(this.distance));
         Point pij = getCenterPoint(nX, nY, j, i, pc);
         Color topLeft, topRight, bottomLeft, bottomRight;
-        double ry = alignZero(this.height/ nY);
-        double rx = alignZero(this.width/ nX);
+        double ry = alignZero(this.height / nY);
+        double rx = alignZero(this.width / nX);
 
-        topLeft = castRay((int)(pij.getX() + -rx/2), (int)(pij.getY() + ry/2), j, i);
-        topRight = castRay((int)(pij.getX() + rx/2), (int)(pij.getY() + ry/2), j, i);
-        bottomLeft = castRay((int)(pij.getX() + -rx/2), (int)(pij.getY() + -ry/2), j, i);
-        bottomRight = castRay((int)(pij.getX() + rx/2), (int)(pij.getY() + -ry/2), j, i);
+        topLeft = castRay((int) (pij.getX() + -rx / 2), (int) (pij.getY() + ry / 2), j, i);
+        topRight = castRay((int) (pij.getX() + rx / 2), (int) (pij.getY() + ry / 2), j, i);
+        bottomLeft = castRay((int) (pij.getX() + -rx / 2), (int) (pij.getY() + -ry / 2), j, i);
+        bottomRight = castRay((int) (pij.getX() + rx / 2), (int) (pij.getY() + -ry / 2), j, i);
         return topLeft.equals(topRight) && topLeft.equals(bottomLeft) && topLeft.equals(bottomRight);
     }
 
@@ -370,7 +380,7 @@ public class Camera {
      */
     private Color castRay(int nX, int nY, float j, float i) {
         Ray ray = this.constructRay(nX, nY, j, i);
-        if(depthOfFiled) // if there is the improvement of depth of filed
+        if (depthOfFiled) // if there is the improvement of depth of filed
             return averagedBeamColor(ray);
 
         return this.rayTracer.traceRay(ray);
@@ -401,8 +411,8 @@ public class Camera {
      *
      * @param nX number of pixels in the horizontal direction
      * @param nY number of pixels in the vertical direction
-     * @param j the x-coordinate of the pixel in the image
-     * @param i the row of the pixel
+     * @param j  the x-coordinate of the pixel in the image
+     * @param i  the row of the pixel
      * @param pc The center of the image plane
      * @return The center point of the pixel.
      */
@@ -504,7 +514,6 @@ public class Camera {
 
         return pixelColor.reduce(this.gridSize * this.gridSize);
     }
-
 
 
     /** Depth Of Filed improvements **/
