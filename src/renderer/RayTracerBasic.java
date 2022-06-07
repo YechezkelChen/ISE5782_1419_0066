@@ -9,6 +9,10 @@ import java.util.List;
 
 import static primitives.Util.alignZero;
 
+/**
+ * It calculates the color of a point on a geometry, by calculating the color of the light sources that affect it, and the
+ * color of the point by the reflected rays from the other geometries in the scene
+ */
 public class RayTracerBasic extends RayTracerBase {
 
     /**

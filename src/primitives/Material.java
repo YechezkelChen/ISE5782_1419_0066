@@ -1,5 +1,10 @@
 package primitives;
 
+/**
+ * "The Material class represents a material that can be applied to a
+ * surface."
+ *
+ */
 public class Material {
 
     /**

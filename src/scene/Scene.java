@@ -7,6 +7,9 @@ import primitives.*;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * This class represents a scene in the 3D world
+ */
 public class Scene {
     /**
      * Declaring a variable called `name` that is a `String` type.

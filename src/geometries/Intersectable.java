@@ -11,7 +11,7 @@ import primitives.*;
 public abstract class Intersectable {
 
     /**
-     * > A GeoPoint is a Geometry and Point
+     * A GeoPoint is a Geometry and Point
      */
     public static class GeoPoint {
         /**

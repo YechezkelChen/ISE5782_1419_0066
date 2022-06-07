@@ -2,6 +2,9 @@ package lighting;
 
 import primitives.*;
 
+/**
+ * It's a point light that has a direction and an angle
+ */
 public class SpotLight extends PointLight {
 
     /**
@@ -38,6 +41,12 @@ public class SpotLight extends PointLight {
         return super.getIntensity(p).scale(Math.pow(dirL,angle));
     }
 
+    /**
+     * This function sets the angle of the light beam to the given angle and returns the light object.
+     *
+     * @param angle The angle of the spotlight's beam.
+     * @return The SpotLight object.
+     */
     public SpotLight setNarrowBeam(int angle){
         this.angle = angle;
         return this;

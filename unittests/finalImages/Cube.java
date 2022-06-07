@@ -12,6 +12,9 @@ import scene.Scene;
 
 import static java.awt.Color.*;
 
+/**
+ * It creates a cube with a bunch of spheres and cylinders around it, and then renders it from four different angles
+ */
 public class Cube {
     public static final double coordinate = 300.0;
 

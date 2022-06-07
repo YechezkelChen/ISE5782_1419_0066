@@ -87,7 +87,7 @@ public class PlaneTest {
         assertNull(plane2.findIntersections(new Ray(new Point(0.0, 0.0, 1.0), new Vector(0.0, 0.0, 1.0))),"There should be no point of intersection because the ray is after the plane");
 
         // ****************** Special cases ******************
-        // TC16: Ray is neither orthogonal nor parallel to and begins at the plane (𝑃0 is in the plane, but not the ray) - this is need to be 0 intersection point
+        // TC16: Ray is neither orthogonal nor parallel to and begins at the plane (p0 is in the plane, but not the ray) - this is need to be 0 intersection point
         assertNull(plane2.findIntersections(new Ray(new Point(1.0, 1.0, 0.0), new Vector(-1.0, -1.0, 1.0))),"There should be no point of intersection because the ray begins at the plane");
 
         // TC17: Ray is neither orthogonal nor parallel to the plane and begins in the same point which appears as reference point in the plane (Q) - this is need to be 0 intersection point
